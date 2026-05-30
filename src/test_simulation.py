@@ -33,8 +33,18 @@ def main():
     database.init_db()
     wakeword = WakeWordDetector()
 
-    print("\n[SIMULATION] Loading test.wav instead of using microphone...")
+    print("\n[SIMULATION] Loading 'test.wav' from the current folder...")
+    if not os.path.exists("test.wav"):
+        print("❌ ERROR: 'test.wav' not found! Please place a test audio file named 'test.wav' in this folder.")
+        sys.exit(1)
+        
     audio, _ = librosa.load("test.wav", sr=SAMPLE_RATE, mono=True)
+    
+    # 0. Enroll the user into the database for the test
+    print("\n[ENROLLMENT] Registering the voice from 'test.wav' as 'TestUser'...")
+    embedding = speaker_biometrics.extract_voice_fingerprint(audio_data=audio)
+    database.save_user_biometrics("TestUser", embedding)
+    print("✅ Voice registered successfully!")
     
     # Simulate a loud noise for the wake word
     dummy_wake_audio = np.ones(8000) * 0.5 

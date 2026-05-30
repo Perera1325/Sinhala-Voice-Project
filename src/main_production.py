@@ -81,23 +81,35 @@ def main():
             print(f"✅ Identity Verified: Welcome, {user_name}! Listening for light command...")
 
             # --- STAGE 3: TFLite COMMAND RECOGNITION ---
-            # Recording 1.5 seconds specifically tailored to our light_model.tflite
-            command_audio = sd.rec(int(RECORD_DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
-            sd.wait()
+            print("⏳ You have 10 seconds to give a command...")
             
-            print("📝 Running MFCC feature extraction and TFLite Inference...")
-            command, confidence = command_recognizer.recognize_command(command_audio.flatten())
+            command_detected = False
+            start_time = time.time()
             
-            if command == "LIGHT_ON":
-                print(f"🧠 Command Detected: {command} ({confidence:.1f}%)")
-                send_to_flask("light_1", "ON")
-                time.sleep(2)
-            elif command == "LIGHT_OFF":
-                print(f"🧠 Command Detected: {command} ({confidence:.1f}%)")
-                send_to_flask("light_1", "OFF")
-                time.sleep(2)
-            else:
-                print(f"🤷 UNKNOWN or Ignored Command (Confidence: {confidence:.1f}%)")
+            # Listen in a loop for up to 10 seconds
+            while time.time() - start_time < 10:
+                # Record a 1.5s chunk
+                command_audio = sd.rec(int(RECORD_DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
+                sd.wait()
+                
+                command, confidence = command_recognizer.recognize_command(command_audio.flatten())
+                
+                if command == "LIGHT_ON":
+                    print(f"🧠 Command Detected: {command} ({confidence:.1f}%)")
+                    send_to_flask("light_1", "ON")
+                    command_detected = True
+                    time.sleep(2) # Cooldown after successful command
+                    break
+                elif command == "LIGHT_OFF":
+                    print(f"🧠 Command Detected: {command} ({confidence:.1f}%)")
+                    send_to_flask("light_1", "OFF")
+                    command_detected = True
+                    time.sleep(2)
+                    break
+                # If UNKNOWN, loop continues silently until 10 seconds is up
+                
+            if not command_detected:
+                print("⏰ Timeout: No command heard within 10 seconds. Going back to sleep...")
 
         except KeyboardInterrupt:
             print("\nShutting down system...")
