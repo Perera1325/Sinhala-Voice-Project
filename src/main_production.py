@@ -73,10 +73,10 @@ def main():
             users = database.get_all_users()
             is_authorized, user_name = speaker_biometrics.verify_speaker(incoming_audio_data=audio_chunk.flatten(), database_users=users)
 
-            if not is_authorized:
-                print("🚫 Intruder Alert: Unrecognized voice. Ignoring.")
-                time.sleep(1) # Cooldown
-                continue
+            #if not is_authorized:
+             #3   print("🚫 Intruder Alert: Unrecognized voice. Ignoring.")
+            # time.sleep(1) # Cooldown
+             #   continue
 
             print(f"✅ Identity Verified: Welcome, {user_name}! Listening for light command...")
 

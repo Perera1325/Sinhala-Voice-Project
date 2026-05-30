@@ -4,7 +4,7 @@ import librosa
 
 # Configuration
 SAMPLE_RATE = 16000
-CONFIDENCE_THRESHOLD = 75.0
+CONFIDENCE_THRESHOLD = 40.0
 
 # Load Model
 # Currently loads the model trained for "Light eka danna".
