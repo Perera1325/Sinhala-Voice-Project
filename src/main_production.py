@@ -88,6 +88,7 @@ def main():
             
             # Listen in a loop for up to 10 seconds
             while time.time() - start_time < 10:
+                print(f"   🎤 Listening... ({int(10 - (time.time() - start_time))}s left)")
                 # Record a 1.5s chunk
                 command_audio = sd.rec(int(RECORD_DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
                 sd.wait()
