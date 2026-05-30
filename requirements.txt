@@ -1,0 +1,10 @@
+numpy
+scikit-learn
+librosa
+soundfile
+tqdm
+joblib
+sounddevice
+requests
+paho-mqtt
+tensorflow

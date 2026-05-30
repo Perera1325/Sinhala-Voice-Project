@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# SQLite Database
+*.db
+*.sqlite3
+
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# Audio
+temp_enroll.wav
+temp_test.wav

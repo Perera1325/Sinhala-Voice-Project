@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-blue: #00f3ff;
+  --color-neon-purple: #bc13fe;
+  --color-dark-bg: #0a0a0f;
+  --color-card-bg: #151520;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: white;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
