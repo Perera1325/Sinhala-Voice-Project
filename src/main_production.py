@@ -107,7 +107,9 @@ def main():
                     command_detected = True
                     time.sleep(2)
                     break
-                # If UNKNOWN, loop continues silently until 10 seconds is up
+                else:
+                    # Print what it actually thought it heard to help debug
+                    print(f"   [Debug] AI heard: {command} with {confidence:.1f}% confidence")
                 
             if not command_detected:
                 print("⏰ Timeout: No command heard within 10 seconds. Going back to sleep...")
