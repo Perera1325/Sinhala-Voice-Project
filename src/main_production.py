@@ -8,19 +8,34 @@ import requests
 import database
 import speaker_biometrics
 from wakeword_engine import WakeWordDetector
-import command_recognizer
+import speech_recognition as sr
+import nlp_classifier
+import pyttsx3
+
+def speak(text):
+    try:
+        engine = pyttsx3.init() 
+        voices = engine.getProperty('voices')
+        for voice in voices:
+            if "Zira" in voice.name or "female" in voice.name.lower():
+                engine.setProperty('voice', voice.id)
+                break
+        engine.say(text)
+        engine.runAndWait()
+    except Exception as e:
+        print(f"TTS Error: {e}")
 
 # Configuration
 SAMPLE_RATE = 16000
 CHUNK_DURATION = 0.5   # 0.5s sliding window for Wake Word
-RECORD_DURATION = 1.5  # 1.5s recording for the TFLite KWS Light Command
-FLASK_API_BASE = "http://192.168.1.13:5000/channels"
+RECORD_DURATION = 4.0  # 4.0s recording for full sentence commands
+FLASK_API_BASE = "http://192.168.8.199:5000/channels"
 
 # Map human-readable device names to the UUIDs from your existing Flask server
 DEVICE_UUIDS = {
-    "light_1": "b21642ae-34f1-485c-b459-351bafcdf920",
+    "light_1": "89093657-17c4-4b1c-9cfe-16037a5b21d0",
     # Add your Fan and Curtain UUIDs here when you train them!
-    "fan_1": "YOUR-FAN-UUID-HERE",
+    "fan_1": "01d574ae-f9e4-42de-b238-0c9e220ef0f4",
     "curtain_1": "YOUR-CURTAIN-UUID-HERE"
 }
 
@@ -45,11 +60,14 @@ def send_to_flask(device_id, action):
 
 def main():
     print("\n" + "="*50)
-    print("🚀 PROJECT FLOW AI ASSISTANT (TFLite CNN) 🚀")
+    print("🚀 PROJECT FLOW AI ASSISTANT (Google STT + Biometrics) 🚀")
     print("="*50)
 
     database.init_db()
     wakeword = WakeWordDetector()
+    
+    # Initialize the Google Speech Recognizer
+    recognizer = sr.Recognizer()
 
     while True:
         try:
@@ -69,50 +87,59 @@ def main():
 
             print("🔔 WAKE WORD DETECTED! ('Hey Kasu')")
             
+            # --- STAGE 2 & 3: RECORD COMMAND ---
+            print("🎤 Listening for a command (speak now)...")
+            # Record a 4.0s chunk for BOTH Biometrics and Command
+            command_audio = sd.rec(int(RECORD_DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
+            sd.wait()
+            
             # --- STAGE 2: BIOMETRICS ---
             users = database.get_all_users()
-            is_authorized, user_name = speaker_biometrics.verify_speaker(incoming_audio_data=audio_chunk.flatten(), database_users=users)
+            is_authorized, user_name = speaker_biometrics.verify_speaker(incoming_audio_data=command_audio.flatten(), database_users=users)
 
-            #if not is_authorized:
-             #3   print("🚫 Intruder Alert: Unrecognized voice. Ignoring.")
-            # time.sleep(1) # Cooldown
-             #   continue
+            if not is_authorized:
+                print("🚫 Intruder Alert: Unrecognized voice. Ignoring.")
+                speak("I don't know you.")
+                time.sleep(1) # Cooldown
+                continue
 
-            print(f"✅ Identity Verified: Welcome, {user_name}! Listening for light command...")
-
-            # --- STAGE 3: TFLite COMMAND RECOGNITION ---
-            print("⏳ You have 10 seconds to give a command...")
+            print(f"✅ Identity Verified: Welcome, {user_name}!")
+            speak(f"Hello {user_name}.")
             
-            command_detected = False
-            start_time = time.time()
+            # --- STAGE 3: SPEECH-TO-TEXT & CLASSIFICATION ---
             
-            # Listen in a loop for up to 10 seconds
-            while time.time() - start_time < 10:
-                print(f"   🎤 Listening... ({int(10 - (time.time() - start_time))}s left)")
-                # Record a 1.5s chunk
-                command_audio = sd.rec(int(RECORD_DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
-                sd.wait()
+            print("🧠 Transcribing with Google Speech Recognition (Sinhala)...")
+            # Convert float32 numpy array to 16-bit PCM bytes for SpeechRecognition
+            audio_data_int16 = (command_audio.flatten() * 32767).astype(np.int16)
+            audio_data_obj = sr.AudioData(audio_data_int16.tobytes(), SAMPLE_RATE, 2)
+            
+            try:
+                # Using the free Google Web Speech API, set natively to Sinhala
+                transcription = recognizer.recognize_google(audio_data_obj, language="si-LK")
                 
-                command, confidence = command_recognizer.recognize_command(command_audio.flatten())
+                # Translate to English for debugging
+                from deep_translator import GoogleTranslator
+                english_translation = GoogleTranslator(source='si', target='en').translate(transcription)
                 
-                if command == "LIGHT_ON":
-                    print(f"🧠 Command Detected: {command} ({confidence:.1f}%)")
-                    send_to_flask("light_1", "ON")
-                    command_detected = True
+                print(f"🗣️ You said (Sinhala): '{transcription}'")
+                print(f"🌍 English Meaning: '{english_translation}'")
+                
+                device_id, action = nlp_classifier.classify_command(transcription)
+                
+                if device_id and action:
+                    print(f"🎯 Action Resolved: Turn {action} the {device_id}")
+                    speak(f"Turning {action} the {device_id.replace('_1', '')}")
+                    send_to_flask(device_id, action)
                     time.sleep(2) # Cooldown after successful command
-                    break
-                elif command == "LIGHT_OFF":
-                    print(f"🧠 Command Detected: {command} ({confidence:.1f}%)")
-                    send_to_flask("light_1", "OFF")
-                    command_detected = True
-                    time.sleep(2)
-                    break
                 else:
-                    # Print what it actually thought it heard to help debug
-                    print(f"   [Debug] AI heard: {command} with {confidence:.1f}% confidence")
-                
-            if not command_detected:
-                print("⏰ Timeout: No command heard within 10 seconds. Going back to sleep...")
+                    print("❓ Unknown voice command or no device recognized.")
+                    time.sleep(1)
+            except sr.UnknownValueError:
+                print("❓ Could not understand audio.")
+                time.sleep(1)
+            except sr.RequestError as e:
+                print(f"❌ Could not request results from Google Speech Recognition service; {e}")
+                time.sleep(1)
 
         except KeyboardInterrupt:
             print("\nShutting down system...")
