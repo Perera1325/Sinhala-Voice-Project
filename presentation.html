@@ -4,42 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-Based Sinhala Voice-Controlled Home Automation | Project Defence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg-primary: #0a0a1a;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --text-primary: #f0f0ff;
-            --text-secondary: #9090b0;
-            --accent-blue: #4f8fff;
-            --accent-purple: #a855f7;
+            --bg-primary: #05050a;
+            --bg-card: rgba(15, 15, 25, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
+            --accent-blue: #00f0ff;
+            --accent-purple: #b026ff;
             --accent-cyan: #06d6a0;
-            --accent-pink: #f472b6;
-            --accent-red: #ef4444;
+            --accent-pink: #ff2a7a;
             --accent-yellow: #fbbf24;
-            --gradient-1: linear-gradient(135deg, #4f8fff 0%, #a855f7 100%);
-            --gradient-2: linear-gradient(135deg, #06d6a0 0%, #4f8fff 100%);
-            --gradient-3: linear-gradient(135deg, #f472b6 0%, #a855f7 100%);
+            --gradient-1: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            --gradient-2: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%);
+            --gradient-3: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-purple) 100%);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
             -webkit-font-smoothing: antialiased;
+            perspective: 1000px; /* For 3D transforms */
         }
+
+        /* ===== 3D CANVAS BACKGROUND ===== */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent-blue);
+            border-right-color: var(--accent-purple);
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* ===== SLIDE CONTAINER ===== */
         .presentation {
             width: 100vw;
             height: 100vh;
             position: relative;
+            transform-style: preserve-3d;
         }
 
         .slide {
@@ -49,705 +90,481 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 60px 80px;
+            padding: 50px 80px;
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateZ(-200px) scale(0.9);
+            transition: all 1s cubic-bezier(0.25, 1, 0.3, 1);
             pointer-events: none;
-            overflow: hidden;
         }
 
         .slide.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateZ(0) scale(1);
             pointer-events: auto;
         }
 
         .slide.exit-up {
             opacity: 0;
-            transform: translateY(-40px);
+            transform: translateZ(-300px) translateY(-50px) scale(0.8);
         }
 
-        /* ===== BACKGROUND EFFECTS ===== */
-        .bg-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            z-index: -1;
-        }
-
-        .bg-orb-1 { width: 600px; height: 600px; background: var(--accent-blue); top: -200px; left: -200px; }
-        .bg-orb-2 { width: 500px; height: 500px; background: var(--accent-purple); bottom: -150px; right: -150px; }
-        .bg-orb-3 { width: 400px; height: 400px; background: var(--accent-cyan); top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        .grid-bg {
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(79, 143, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(79, 143, 255, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: -2;
+        .slide.exit-down {
+            opacity: 0;
+            transform: translateZ(300px) translateY(50px) scale(1.2);
         }
 
         /* ===== TYPOGRAPHY ===== */
-        .slide-number {
-            position: fixed;
-            bottom: 30px;
-            right: 40px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            color: var(--text-secondary);
-            z-index: 100;
-            background: rgba(0,0,0,0.3);
-            padding: 6px 16px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: var(--gradient-1);
-            z-index: 100;
-            transition: width 0.6s ease;
-            box-shadow: 0 0 15px rgba(79, 143, 255, 0.5);
-        }
-
-        h1 { font-size: 52px; font-weight: 900; line-height: 1.15; letter-spacing: -1px; }
-        h2 { font-size: 42px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
-        h3 { font-size: 28px; font-weight: 700; line-height: 1.3; }
-        h4 { font-size: 20px; font-weight: 600; }
+        h1 { font-size: 56px; font-weight: 900; line-height: 1.1; letter-spacing: -1px; text-transform: uppercase; }
+        h2 { font-size: 46px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
+        h3 { font-size: 30px; font-weight: 700; line-height: 1.3; }
+        h4 { font-size: 22px; font-weight: 600; }
 
         .gradient-text {
             background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
         }
 
         .gradient-text-2 {
             background: var(--gradient-2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-shadow: 0 0 30px rgba(6, 214, 160, 0.4);
         }
 
         .gradient-text-3 {
             background: var(--gradient-3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 42, 122, 0.4);
         }
 
         .subtitle {
-            font-size: 20px;
+            font-size: 22px;
             color: var(--text-secondary);
-            font-weight: 400;
+            font-weight: 300;
             line-height: 1.6;
             max-width: 800px;
         }
 
         .label {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 3px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--accent-blue);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            display: inline-block;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 6px 16px;
+            border-radius: 30px;
+            background: rgba(0, 240, 255, 0.05);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         }
 
-        /* ===== CARDS ===== */
+        /* ===== GLASSMORPHISM CARDS (3D Tilt effect built in) ===== */
         .card {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
             padding: 32px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glossy reflection on cards */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: 0.7s;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        .card-accent {
-            border-left: 3px solid;
+        .card:hover::before {
+            left: 200%;
         }
 
-        .card-blue { border-left-color: var(--accent-blue); }
-        .card-purple { border-left-color: var(--accent-purple); }
-        .card-cyan { border-left-color: var(--accent-cyan); }
-        .card-pink { border-left-color: var(--accent-pink); }
+        .card-accent { border-top: 4px solid; }
+        .card-blue { border-top-color: var(--accent-blue); }
+        .card-purple { border-top-color: var(--accent-purple); }
+        .card-cyan { border-top-color: var(--accent-cyan); }
+        .card-pink { border-top-color: var(--accent-pink); }
 
         /* ===== GRID LAYOUTS ===== */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; width: 100%; }
-        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; width: 100%; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; width: 100%; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; width: 100%; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; width: 100%; }
 
-        .flex-center { display: flex; align-items: center; justify-content: center; }
         .flex-col { display: flex; flex-direction: column; }
-        .gap-sm { gap: 12px; }
-        .gap-md { gap: 24px; }
-        .gap-lg { gap: 40px; }
+        .gap-sm { gap: 16px; }
+        .gap-md { gap: 28px; }
+        .gap-lg { gap: 48px; }
 
         .w-full { width: 100%; }
         .text-center { text-align: center; }
 
         /* ===== STAT BOXES ===== */
-        .stat-box {
-            text-align: center;
-            padding: 24px;
-        }
-
-        .stat-number {
-            font-size: 56px;
-            font-weight: 900;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 8px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* ===== BULLET LISTS ===== */
-        .bullet-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .bullet-list li {
-            position: relative;
-            padding-left: 28px;
-            margin-bottom: 16px;
-            font-size: 18px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .bullet-list li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 10px;
-            width: 10px;
-            height: 10px;
-            border-radius: 3px;
-            background: var(--accent-blue);
-        }
-
-        .bullet-list li strong {
-            color: var(--text-primary);
-        }
-
-        .bullet-list li:nth-child(2)::before { background: var(--accent-purple); }
-        .bullet-list li:nth-child(3)::before { background: var(--accent-cyan); }
-        .bullet-list li:nth-child(4)::before { background: var(--accent-pink); }
-        .bullet-list li:nth-child(5)::before { background: var(--accent-yellow); }
-
-        /* ===== FLOWCHART ===== */
-        .flow-step {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .flow-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .flow-arrow {
-            font-size: 28px;
-            color: var(--text-secondary);
-            text-align: center;
-            padding: 4px 0;
-        }
-
-        /* ===== TABLES ===== */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 14px 16px;
-            font-weight: 700;
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--accent-blue);
-            border-bottom: 2px solid rgba(79, 143, 255, 0.2);
-        }
-
-        .data-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: var(--text-secondary);
-        }
-
-        .data-table tr:hover td {
-            background: rgba(79, 143, 255, 0.03);
-        }
-
-        .data-table .highlight {
-            color: var(--accent-cyan);
-            font-weight: 700;
-        }
-
-        .data-table .row-best {
-            background: rgba(6, 214, 160, 0.05);
-        }
-
-        .data-table .row-best td {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        /* ===== TAGS / BADGES ===== */
-        .badge {
-            display: inline-block;
-            padding: 4px 14px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .badge-blue { background: rgba(79, 143, 255, 0.15); color: var(--accent-blue); }
-        .badge-green { background: rgba(6, 214, 160, 0.15); color: var(--accent-cyan); }
-        .badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
-        .badge-pink { background: rgba(244, 114, 182, 0.15); color: var(--accent-pink); }
+        .stat-box { text-align: center; padding: 28px; }
+        .stat-number { font-size: 64px; font-weight: 900; line-height: 1; text-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .stat-label { font-size: 14px; color: var(--text-secondary); margin-top: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
 
         /* ===== CHART CONTAINERS ===== */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 320px;
+        .chart-container-lg { position: relative; width: 100%; height: 380px; }
+
+        /* ===== ANIMATIONS FOR SLIDE ENTRANCE ===== */
+        .animate-in { opacity: 0; transform: translateY(30px) translateZ(-50px); filter: blur(5px); }
+        .slide.active .animate-in { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes popIn {
+            to { opacity: 1; transform: translateY(0) translateZ(0); filter: blur(0); }
         }
 
-        .chart-container-lg {
-            position: relative;
-            width: 100%;
-            height: 400px;
-        }
+        .slide.active .animate-in:nth-child(1) { animation-delay: 0.2s; }
+        .slide.active .animate-in:nth-child(2) { animation-delay: 0.35s; }
+        .slide.active .animate-in:nth-child(3) { animation-delay: 0.5s; }
+        .slide.active .animate-in:nth-child(4) { animation-delay: 0.65s; }
+        .slide.active .animate-in:nth-child(5) { animation-delay: 0.8s; }
 
-        /* ===== EQUATION BOX ===== */
-        .equation-box {
-            background: rgba(79, 143, 255, 0.06);
-            border: 1px solid rgba(79, 143, 255, 0.15);
-            border-radius: 12px;
-            padding: 16px 24px;
+        /* ===== HUD ELEMENTS (Progress, Navigation) ===== */
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 16px;
-            color: var(--accent-blue);
-            text-align: center;
+            color: var(--text-primary);
+            z-index: 100;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* ===== NAVIGATION HINT ===== */
+        .progress-container {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-1);
+            transition: width 0.8s cubic-bezier(0.25, 1, 0.3, 1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+        }
+
         .nav-hint {
             position: fixed;
             bottom: 30px;
             left: 40px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.2);
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
             z-index: 100;
             font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* ===== TITLE SLIDE SPECIAL ===== */
-        .title-meta {
             display: flex;
-            gap: 40px;
-            margin-top: 40px;
-        }
-
-        .title-meta-item {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .title-meta-item strong {
-            color: var(--text-primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        /* ===== COMPARISON HIGHLIGHT ===== */
-        .comparison-row {
-            display: flex;
+            gap: 12px;
             align-items: center;
-            gap: 20px;
-            padding: 16px 24px;
-            border-radius: 12px;
-            background: var(--bg-card);
-            margin-bottom: 12px;
         }
 
-        .comparison-bar {
-            height: 8px;
-            border-radius: 4px;
-            flex: 1;
-            background: rgba(255,255,255,0.06);
-            overflow: hidden;
+        .key-btn {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
         }
 
-        .comparison-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        /* Formatted Lists & Badges */
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
+        .badge-blue { background: rgba(0, 240, 255, 0.15); color: var(--accent-blue); border: 1px solid rgba(0, 240, 255, 0.3); }
+        .badge-purple { background: rgba(176, 38, 255, 0.15); color: var(--accent-purple); border: 1px solid rgba(176, 38, 255, 0.3); }
+        .badge-cyan { background: rgba(6, 214, 160, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 214, 160, 0.3); }
+        .badge-pink { background: rgba(255, 42, 122, 0.15); color: var(--accent-pink); border: 1px solid rgba(255, 42, 122, 0.3); }
 
-        /* ===== TIMELINE ===== */
-        .timeline {
+        .bullet-list { list-style: none; padding: 0; }
+        .bullet-list li {
             position: relative;
-            padding-left: 30px;
+            padding-left: 32px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
-
-        .timeline::before {
-            content: '';
+        .bullet-list li::before {
+            content: '▹';
             position: absolute;
             left: 0;
             top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+            font-size: 22px;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+        .bullet-list li strong { color: var(--text-primary); }
+
+        /* Tables */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 16px; }
+        .data-table th { text-align: left; padding: 18px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); border-bottom: 2px solid rgba(0, 240, 255, 0.3); }
+        .data-table td { padding: 16px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-secondary); transition: 0.3s; }
+        .data-table tr:hover td { background: rgba(0, 240, 255, 0.05); color: white; }
+        .highlight { color: var(--accent-cyan) !important; font-weight: 700; text-shadow: 0 0 10px rgba(6,214,160,0.4); }
+
+        /* Equations */
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 20px 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            color: var(--accent-blue);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
-        .timeline-item {
-            position: relative;
-            padding-bottom: 28px;
-            padding-left: 24px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -35px;
-            top: 6px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--accent-blue);
-            border: 3px solid var(--bg-primary);
-        }
-
-        .timeline-item:nth-child(2)::before { background: var(--accent-purple); }
-        .timeline-item:nth-child(3)::before { background: var(--accent-cyan); }
-        .timeline-item:nth-child(4)::before { background: var(--accent-pink); }
-        .timeline-item:nth-child(5)::before { background: var(--accent-yellow); }
-
-        .animate-in {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .slide.active .animate-in {
-            animation: fadeInUp 0.6s forwards;
-        }
-
-        .slide.active .animate-in:nth-child(1) { animation-delay: 0.1s; }
-        .slide.active .animate-in:nth-child(2) { animation-delay: 0.25s; }
-        .slide.active .animate-in:nth-child(3) { animation-delay: 0.4s; }
-        .slide.active .animate-in:nth-child(4) { animation-delay: 0.55s; }
-        .slide.active .animate-in:nth-child(5) { animation-delay: 0.7s; }
-        .slide.active .animate-in:nth-child(6) { animation-delay: 0.85s; }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(79, 143, 255, 0.2); }
-            50% { box-shadow: 0 0 40px rgba(79, 143, 255, 0.4); }
-        }
     </style>
 </head>
 <body>
-    <div class="grid-bg"></div>
-    <div class="progress-bar" id="progressBar"></div>
-    <div class="slide-number" id="slideNumber">1 / 18</div>
-    <div class="nav-hint">← →  or  SPACE to navigate</div>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-ring"></div>
+        <h3 style="margin-top: 30px; font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); font-weight: 400; letter-spacing: 2px;">INITIALIZING SYSTEM...</h3>
+    </div>
 
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
+    <!-- HUD -->
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="slide-number" id="slideNumber">1 / 18</div>
+    <div class="nav-hint">
+        <span class="key-btn">←</span> <span class="key-btn">→</span> OR <span class="key-btn">SPACE</span> TO NAVIGATE
+    </div>
+
+    <!-- PRESENTATION SLIDES -->
     <div class="presentation" id="presentation">
 
-        <!-- ============================================ -->
         <!-- SLIDE 1: TITLE -->
-        <!-- ============================================ -->
         <div class="slide active" data-slide="0">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="text-center flex-col gap-md" style="align-items: center;">
-                <div class="animate-in">
-                    <div class="label">Final Year Individual Project Defence</div>
-                </div>
-                <h1 class="animate-in" style="max-width: 900px;">
-                    AI-Based Sinhala Voice-Controlled Home Automation with <span class="gradient-text">Noise Reduction</span>
+            <div class="text-center flex-col gap-md" style="align-items: center; max-width: 1000px;">
+                <div class="animate-in"><div class="label">Project Defence</div></div>
+                <h1 class="animate-in">
+                    AI-Based Sinhala Voice-Controlled Home Automation with <br>
+                    <span class="gradient-text">Noise Reduction</span>
                 </h1>
-                <p class="subtitle animate-in" style="margin-top: 12px;">
-                    A novel VAD-Guided Dynamic Wiener Filter for robust speech recognition in noisy domestic environments, deployed on edge hardware.
+                <p class="subtitle animate-in" style="margin-top: 20px; font-size: 24px;">
+                    A novel VAD-Guided Dynamic Wiener Filter for robust offline speech recognition deployed on edge hardware.
                 </p>
-                <div class="title-meta animate-in">
-                    <div class="title-meta-item">
-                        <strong>Student</strong>
-                        Kasundi Perera
+                <div class="animate-in card" style="margin-top: 40px; display: inline-flex; gap: 60px; padding: 24px 48px; background: rgba(0,0,0,0.5);">
+                    <div style="text-align: left;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-blue);">STUDENT</span>
+                        <h4 style="margin-top: 5px;">Kasundi Perera</h4>
                     </div>
-                    <div class="title-meta-item">
-                        <strong>Student ID</strong>
-                        [Your ID]
+                    <div style="text-align: left;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-purple);">DATE</span>
+                        <h4 style="margin-top: 5px;">June 2026</h4>
                     </div>
-                    <div class="title-meta-item">
-                        <strong>Supervisor</strong>
-                        [Supervisor Name]
-                    </div>
-                    <div class="title-meta-item">
-                        <strong>Date</strong>
-                        June 2026
+                    <div style="text-align: left;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan);">REPO</span>
+                        <h4 style="margin-top: 5px;">github.com/kasundisandalika-netizen</h4>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
         <!-- SLIDE 2: THE PROBLEM -->
-        <!-- ============================================ -->
         <div class="slide" data-slide="1">
-            <div class="bg-orb bg-orb-3"></div>
-            <div class="w-full flex-col gap-lg">
+            <div class="w-full flex-col gap-lg max-w-1200" style="max-width: 1200px;">
                 <div class="animate-in">
-                    <div class="label">Introduction</div>
+                    <div class="label">Context</div>
                     <h2>The <span class="gradient-text">Problem</span></h2>
                 </div>
-                <div class="grid-2 animate-in" style="margin-top: 20px;">
-                    <div class="flex-col gap-md">
-                        <div class="card card-accent card-blue">
-                            <h4>🔊 Environmental Noise</h4>
-                            <p style="color: var(--text-secondary); margin-top: 8px; font-size: 16px; line-height: 1.6;">
-                                Domestic environments contain fans, AC hums, street traffic, and overlapping conversations that severely degrade voice command accuracy.
-                            </p>
-                        </div>
-                        <div class="card card-accent card-purple">
-                            <h4>🌏 Low-Resource Language</h4>
-                            <p style="color: var(--text-secondary); margin-top: 8px; font-size: 16px; line-height: 1.6;">
-                                Sinhala (සිංහල) has minimal ASR research compared to English, with limited pre-trained models and phonetic datasets available.
-                            </p>
-                        </div>
-                        <div class="card card-accent card-cyan">
-                            <h4>🔒 Security Gap</h4>
-                            <p style="color: var(--text-secondary); margin-top: 8px; font-size: 16px; line-height: 1.6;">
-                                Commercial smart speakers (Alexa, Google Home) lack speaker verification — anyone nearby can control your home.
-                            </p>
-                        </div>
+                <div class="grid-3 animate-in">
+                    <div class="card card-accent card-blue">
+                        <div style="font-size: 40px; margin-bottom: 20px;">🔊</div>
+                        <h3>Environmental Noise</h3>
+                        <p style="color: var(--text-secondary); margin-top: 16px; font-size: 18px; line-height: 1.6;">
+                            Homes contain fans, AC hums, and street traffic that severely degrade ASR accuracy. Raw command accuracy is often below 60%.
+                        </p>
                     </div>
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.15);">
-                        <div style="font-size: 80px; margin-bottom: 20px;">📉</div>
-                        <h3 style="color: var(--accent-red); text-align: center;">Unfiltered ASR Accuracy</h3>
-                        <div class="stat-number gradient-text" style="font-size: 72px; margin: 16px 0;">57.5%</div>
-                        <p style="color: var(--text-secondary); text-align: center; font-size: 16px;">Average command accuracy<br>across 4 noise types (Online ASR)</p>
+                    <div class="card card-accent card-purple">
+                        <div style="font-size: 40px; margin-bottom: 20px;">🌍</div>
+                        <h3>Low-Resource Language</h3>
+                        <p style="color: var(--text-secondary); margin-top: 16px; font-size: 18px; line-height: 1.6;">
+                            Sinhala (සිංහල) lacks the massive datasets and pre-trained robust models available for English, requiring custom optimization.
+                        </p>
+                    </div>
+                    <div class="card card-accent card-pink">
+                        <div style="font-size: 40px; margin-bottom: 20px;">🔓</div>
+                        <h3>Security Gap</h3>
+                        <p style="color: var(--text-secondary); margin-top: 16px; font-size: 18px; line-height: 1.6;">
+                            Standard smart speakers (Alexa, Google Home) lack speaker verification—anyone nearby can actuate your home devices.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
         <!-- SLIDE 3: THE SOLUTION -->
-        <!-- ============================================ -->
         <div class="slide" data-slide="2">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="w-full flex-col gap-lg">
+            <div class="w-full flex-col gap-lg" style="max-width: 1200px;">
                 <div class="animate-in">
-                    <div class="label">Introduction</div>
+                    <div class="label">Overview</div>
                     <h2>The <span class="gradient-text-2">Solution</span></h2>
                 </div>
-                <div class="animate-in" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: center; margin: 10px 0;">
-                    <div class="card" style="padding: 16px 24px; text-align: center; min-width: 140px;">
-                        <div style="font-size: 28px;">🎤</div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Microphone<br>Input</div>
+                
+                <!-- Linear Pipeline Diagram -->
+                <div class="animate-in card" style="padding: 30px; display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.6);">
+                    <div class="text-center">
+                        <div style="font-size: 30px;">🎤</div><div style="font-size: 14px; margin-top: 8px;">Mic Input</div>
                     </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 16px 24px; text-align: center; min-width: 140px; border-color: rgba(6, 214, 160, 0.3); background: rgba(6, 214, 160, 0.05);">
-                        <div style="font-size: 28px;">🧹</div>
-                        <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 700; margin-top: 6px;">VGDWF<br>Filter</div>
+                    <div style="color: var(--text-secondary);">→</div>
+                    <div class="text-center" style="color: var(--accent-cyan); font-weight: bold;">
+                        <div style="font-size: 30px;">🧹</div><div style="font-size: 14px; margin-top: 8px;">VGDWF Filter</div>
                     </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 16px 24px; text-align: center; min-width: 140px;">
-                        <div style="font-size: 28px;">🗣️</div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">ASR Engine<br>(Vosk / Google)</div>
+                    <div style="color: var(--text-secondary);">→</div>
+                    <div class="text-center">
+                        <div style="font-size: 30px;">🧠</div><div style="font-size: 14px; margin-top: 8px;">ASR Engine</div>
                     </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 16px 24px; text-align: center; min-width: 140px;">
-                        <div style="font-size: 28px;">🔐</div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Speaker<br>Verification</div>
+                    <div style="color: var(--text-secondary);">→</div>
+                    <div class="text-center">
+                        <div style="font-size: 30px;">🔐</div><div style="font-size: 14px; margin-top: 8px;">Biometrics</div>
                     </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 16px 24px; text-align: center; min-width: 140px;">
-                        <div style="font-size: 28px;">💡</div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Relay Control<br>(ESP32)</div>
+                    <div style="color: var(--text-secondary);">→</div>
+                    <div class="text-center">
+                        <div style="font-size: 30px;">💡</div><div style="font-size: 14px; margin-top: 8px;">Relay Control</div>
                     </div>
                 </div>
+
                 <div class="grid-4 animate-in">
                     <div class="card stat-box">
-                        <div class="stat-number" style="font-size: 40px; color: var(--accent-cyan);">88.8%</div>
+                        <div class="stat-number gradient-text-2">88.8%</div>
                         <div class="stat-label">Online Accuracy</div>
                     </div>
                     <div class="card stat-box">
-                        <div class="stat-number" style="font-size: 40px; color: var(--accent-blue);">83.5%</div>
+                        <div class="stat-number gradient-text">83.5%</div>
                         <div class="stat-label">Offline Accuracy</div>
                     </div>
                     <div class="card stat-box">
-                        <div class="stat-number" style="font-size: 40px; color: var(--accent-purple);">~120ms</div>
+                        <div class="stat-number gradient-text-3">120ms</div>
                         <div class="stat-label">Edge Latency</div>
                     </div>
                     <div class="card stat-box">
-                        <div class="stat-number" style="font-size: 40px; color: var(--accent-pink);">100%</div>
-                        <div class="stat-label">Local & Private</div>
+                        <div class="stat-number" style="color: var(--accent-yellow);">RPi 4</div>
+                        <div class="stat-label">Local Hardware</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
         <!-- SLIDE 4: OBJECTIVES -->
-        <!-- ============================================ -->
         <div class="slide" data-slide="3">
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="w-full flex-col gap-lg">
+            <div class="w-full flex-col gap-lg" style="max-width: 1200px;">
                 <div class="animate-in">
-                    <div class="label">Project Scope</div>
+                    <div class="label">Scope</div>
                     <h2>Research <span class="gradient-text">Objectives</span></h2>
                 </div>
-                <div class="grid-2 animate-in" style="margin-top: 10px;">
-                    <div class="card card-accent card-blue" style="padding: 28px;">
-                        <span class="badge badge-blue" style="margin-bottom: 12px;">OBJECTIVE 1</span>
-                        <h4 style="margin-bottom: 8px;">Compare 5 DSP Noise Reduction Baselines</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6;">Implement and evaluate Spectral Subtraction, Wiener Filter, DWT, Spectral Gating, and Butterworth Bandpass from first principles.</p>
+                <div class="grid-2 animate-in">
+                    <div class="card card-accent card-blue">
+                        <span class="badge badge-blue" style="margin-bottom: 16px;">OBJ 1</span>
+                        <h3>Evaluate DSP Baselines</h3>
+                        <p style="color: var(--text-secondary); font-size: 18px; margin-top: 12px; line-height: 1.6;">
+                            Implement and benchmark 5 standard algorithms (Spectral Subtraction, Wiener, DWT, Spectral Gating, Butterworth) from scratch.
+                        </p>
                     </div>
-                    <div class="card card-accent card-purple" style="padding: 28px;">
-                        <span class="badge badge-purple" style="margin-bottom: 12px;">OBJECTIVE 2</span>
-                        <h4 style="margin-bottom: 8px;">Design a Novel Custom Filter (VGDWF)</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6;">Propose a VAD-Guided Dynamic Wiener Filter that adapts to non-stationary noise using dual-feature Voice Activity Detection.</p>
+                    <div class="card card-accent card-purple">
+                        <span class="badge badge-purple" style="margin-bottom: 16px;">OBJ 2</span>
+                        <h3>Develop Novel VGDWF</h3>
+                        <p style="color: var(--text-secondary); font-size: 18px; margin-top: 12px; line-height: 1.6;">
+                            Design a custom VAD-Guided Dynamic Wiener Filter capable of adapting to non-stationary environments.
+                        </p>
                     </div>
-                    <div class="card card-accent card-cyan" style="padding: 28px;">
-                        <span class="badge badge-green" style="margin-bottom: 12px;">OBJECTIVE 3</span>
-                        <h4 style="margin-bottom: 8px;">Evaluate Offline vs. Online ASR</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6;">Compare local Vosk engine and cloud Google STT for Sinhala command recognition viability.</p>
+                    <div class="card card-accent card-cyan">
+                        <span class="badge badge-cyan" style="margin-bottom: 16px;">OBJ 3</span>
+                        <h3>Offline vs Online ASR</h3>
+                        <p style="color: var(--text-secondary); font-size: 18px; margin-top: 12px; line-height: 1.6;">
+                            Compare local Vosk models against Google Cloud Speech-to-Text for Sinhala command viability.
+                        </p>
                     </div>
-                    <div class="card card-accent card-pink" style="padding: 28px;">
-                        <span class="badge badge-pink" style="margin-bottom: 12px;">OBJECTIVE 4</span>
-                        <h4 style="margin-bottom: 8px;">Deploy on Raspberry Pi 4 Edge Hardware</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6;">Achieve sub-200ms latency on a resource-constrained device with full speaker verification security.</p>
+                    <div class="card card-accent card-pink">
+                        <span class="badge badge-pink" style="margin-bottom: 16px;">OBJ 4</span>
+                        <h3>Edge Hardware Deployment</h3>
+                        <p style="color: var(--text-secondary); font-size: 18px; margin-top: 12px; line-height: 1.6;">
+                            Integrate all AI components and ECAPA-TDNN biometrics onto a Raspberry Pi 4 achieving sub-200ms latency.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
         <!-- SLIDE 5: RESEARCH QUESTIONS -->
-        <!-- ============================================ -->
         <div class="slide" data-slide="4">
-            <div class="bg-orb bg-orb-3"></div>
-            <div class="w-full flex-col gap-lg" style="max-width: 900px;">
+            <div class="w-full flex-col gap-lg" style="max-width: 1000px;">
                 <div class="animate-in">
-                    <div class="label">Research Scope</div>
+                    <div class="label">Scope</div>
                     <h2>Research <span class="gradient-text-3">Questions</span></h2>
                 </div>
                 <div class="flex-col gap-md animate-in">
-                    <div class="card" style="padding: 28px; display: flex; gap: 20px; align-items: flex-start;">
-                        <div style="font-size: 36px; font-weight: 900; color: var(--accent-blue); font-family: 'JetBrains Mono', monospace;">RQ1</div>
-                        <div>
-                            <h4>Which noise reduction method achieves the highest ASR accuracy across stationary and non-stationary noise conditions?</h4>
-                        </div>
+                    <div class="card" style="display: flex; gap: 30px; align-items: center;">
+                        <h1 style="color: var(--accent-blue); font-family: 'JetBrains Mono', monospace; margin: 0;">RQ1</h1>
+                        <h3 style="font-weight: 500; font-size: 24px;">Which noise reduction method achieves the highest ASR accuracy across stationary and non-stationary noise conditions?</h3>
                     </div>
-                    <div class="card" style="padding: 28px; display: flex; gap: 20px; align-items: flex-start;">
-                        <div style="font-size: 36px; font-weight: 900; color: var(--accent-purple); font-family: 'JetBrains Mono', monospace;">RQ2</div>
-                        <div>
-                            <h4>Can a custom-designed filter outperform established DSP methods in domestic noise environments?</h4>
-                        </div>
+                    <div class="card" style="display: flex; gap: 30px; align-items: center;">
+                        <h1 style="color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; margin: 0;">RQ2</h1>
+                        <h3 style="font-weight: 500; font-size: 24px;">Can a custom-designed filter outperform established DSP methods in realistic domestic noise environments?</h3>
                     </div>
-                    <div class="card" style="padding: 28px; display: flex; gap: 20px; align-items: flex-start;">
-                        <div style="font-size: 36px; font-weight: 900; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace;">RQ3</div>
-                        <div>
-                            <h4>Is an offline ASR system viable for real-time Sinhala voice control on edge hardware?</h4>
-                        </div>
+                    <div class="card" style="display: flex; gap: 30px; align-items: center;">
+                        <h1 style="color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; margin: 0;">RQ3</h1>
+                        <h3 style="font-weight: 500; font-size: 24px;">Is an offline ASR system viable for real-time Sinhala voice control on resource-constrained edge hardware?</h3>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 6: LITERATURE REVIEW - HISTORY -->
-        <!-- ============================================ -->
+        <!-- SLIDE 6: GAP ANALYSIS -->
         <div class="slide" data-slide="5">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="w-full flex-col gap-lg">
+            <div class="w-full flex-col gap-lg" style="max-width: 1200px;">
                 <div class="animate-in">
                     <div class="label">Literature Review</div>
-                    <h2>Evolution of <span class="gradient-text">Noise Reduction</span></h2>
+                    <h2>Identified <span class="gradient-text">Research Gap</span></h2>
                 </div>
-                <div class="animate-in" style="padding-left: 40px;">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <h4>1979 — Spectral Subtraction <span class="badge badge-blue" style="margin-left: 8px;">Boll, IEEE</span></h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">First frequency-domain noise removal. Simple but introduces musical noise artifacts.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h4>1990s — Wavelet Denoising & Wiener Filters</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">MMSE-optimal filtering and multi-resolution time-frequency decomposition.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h4>2010s — Deep Neural Network Denoisers</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">High accuracy but require GPU, large models, and massive training data — impractical for edge.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h4>2020s — Lightweight Hybrid Approaches</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">Combining classical DSP with intelligent VAD for resource-constrained platforms.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h4 style="color: var(--accent-cyan);">2026 — Our Proposed VGDWF ★</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">Dual-feature VAD + dynamic noise PSD + adaptive β(t). No GPU needed. Runs on RPi 4.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- SLIDE 7: LITERATURE REVIEW - GAP -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="6">
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="w-full flex-col gap-lg">
-                <div class="animate-in">
-                    <div class="label">Literature Review</div>
-                    <h2>Identified <span class="gradient-text-3">Research Gap</span></h2>
-                </div>
-                <div class="animate-in" style="overflow-x: auto;">
+                <div class="animate-in card" style="padding: 0; overflow: hidden;">
                     <table class="data-table">
-                        <thead>
+                        <thead style="background: rgba(0,0,0,0.4);">
                             <tr>
-                                <th>Criteria</th>
+                                <th>Feature Criteria</th>
                                 <th>Amazon Alexa</th>
                                 <th>Google Home</th>
                                 <th>Academic Works</th>
-                                <th style="color: var(--accent-cyan);">This Project ★</th>
+                                <th style="color: var(--accent-cyan); font-size: 18px;">This Project ★</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -763,7 +580,7 @@
                                 <td>❌ (Cloud)</td>
                                 <td>❌ (Cloud)</td>
                                 <td>⚠️ (Varies)</td>
-                                <td class="highlight">✅ Raspberry Pi 4</td>
+                                <td class="highlight">✅ RPi 4 Local</td>
                             </tr>
                             <tr>
                                 <td><strong>Speaker Verification</strong></td>
@@ -777,7 +594,7 @@
                                 <td>❌ (Proprietary)</td>
                                 <td>❌ (Proprietary)</td>
                                 <td>⚠️ (Standard DSP)</td>
-                                <td class="highlight">✅ VGDWF (Novel)</td>
+                                <td class="highlight">✅ VGDWF</td>
                             </tr>
                             <tr>
                                 <td><strong>Privacy-Preserving</strong></td>
@@ -789,139 +606,42 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="animate-in" style="margin-top: 10px;">
-                    <div class="card" style="background: rgba(6, 214, 160, 0.05); border-color: rgba(6, 214, 160, 0.15); text-align: center; padding: 20px;">
-                        <p style="font-size: 18px; color: var(--accent-cyan); font-weight: 600;">
-                            ★ This project uniquely addresses <strong>all five gaps</strong> simultaneously
-                        </p>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 8: METHODOLOGY - SYSTEM ARCHITECTURE -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="7">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="w-full flex-col gap-lg">
+        <!-- SLIDE 7: VGDWF ALGORITHM -->
+        <div class="slide" data-slide="6">
+            <div class="w-full flex-col gap-md" style="max-width: 1200px;">
                 <div class="animate-in">
-                    <div class="label">Methodology</div>
-                    <h2>System <span class="gradient-text">Architecture</span></h2>
-                </div>
-                <div class="animate-in" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center;">
-                    <div class="card" style="padding: 20px 24px; text-align: center;">
-                        <div style="font-size: 32px;">🎤</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 600;">USB Mic</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">16kHz Input</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 20px 24px; text-align: center; border-color: rgba(251, 191, 36, 0.3);">
-                        <div style="font-size: 32px;">🔔</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 600;">Wake Word</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">"Hey Kasu"</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 20px 24px; text-align: center; border-color: rgba(6, 214, 160, 0.4); background: rgba(6, 214, 160, 0.06);">
-                        <div style="font-size: 32px;">🧹</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 700; color: var(--accent-cyan);">VGDWF</div>
-                        <div style="font-size: 11px; color: var(--accent-cyan);">Custom Filter</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 20px 24px; text-align: center;">
-                        <div style="font-size: 32px;">🗣️</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 600;">ASR</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">Vosk / Google</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 20px 24px; text-align: center; border-color: rgba(168, 85, 247, 0.3);">
-                        <div style="font-size: 32px;">🔐</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 600;">ECAPA-TDNN</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">Biometrics</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 20px 24px; text-align: center; border-color: rgba(244, 114, 182, 0.3);">
-                        <div style="font-size: 32px;">🧠</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 600;">NLP</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">Intent Parse</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="card" style="padding: 20px 24px; text-align: center;">
-                        <div style="font-size: 32px;">💡</div>
-                        <div style="font-size: 13px; margin-top: 8px; font-weight: 600;">Relay / MQTT</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">ESP32 GPIO</div>
-                    </div>
-                </div>
-                <div class="grid-3 animate-in">
-                    <div class="card stat-box" style="border-top: 3px solid var(--accent-blue);">
-                        <div style="font-size: 20px;">🖥️</div>
-                        <h4 style="margin: 8px 0 4px;">Raspberry Pi 4</h4>
-                        <p style="font-size: 13px; color: var(--text-secondary);">4GB RAM · ARM Cortex-A72</p>
-                    </div>
-                    <div class="card stat-box" style="border-top: 3px solid var(--accent-purple);">
-                        <div style="font-size: 20px;">📡</div>
-                        <h4 style="margin: 8px 0 4px;">MQTT + Flask API</h4>
-                        <p style="font-size: 13px; color: var(--text-secondary);">Real-time device routing</p>
-                    </div>
-                    <div class="card stat-box" style="border-top: 3px solid var(--accent-pink);">
-                        <div style="font-size: 20px;">🌐</div>
-                        <h4 style="margin: 8px 0 4px;">React Web Dashboard</h4>
-                        <p style="font-size: 13px; color: var(--text-secondary);">Live telemetry + control</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- SLIDE 9: METHODOLOGY - VGDWF ALGORITHM -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="8">
-            <div class="bg-orb bg-orb-3"></div>
-            <div class="w-full flex-col gap-md">
-                <div class="animate-in">
-                    <div class="label">Methodology — Core Contribution</div>
+                    <div class="label">Core Contribution</div>
                     <h2>VAD-Guided Dynamic <span class="gradient-text-2">Wiener Filter</span></h2>
                 </div>
-                <div class="grid-2 animate-in" style="margin-top: 10px;">
+                <div class="grid-2 animate-in" style="align-items: center;">
                     <div class="flex-col gap-sm">
-                        <div class="card card-accent card-blue" style="padding: 20px;">
-                            <span class="badge badge-blue" style="margin-bottom: 8px;">STEP 1</span>
-                            <h4>Dual-Feature VAD</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Classify each frame using <strong>Log-Energy</strong> + <strong>Spectral Entropy</strong>. Speech = high energy AND low entropy.</p>
+                        <div class="card card-accent card-blue" style="padding: 24px;">
+                            <span class="badge badge-blue">STEP 1</span>
+                            <h4 style="margin: 10px 0;">Dual-Feature VAD</h4>
+                            <p style="color: var(--text-secondary); font-size: 16px;">Speech detected if Log-Energy is HIGH and Spectral Entropy is LOW.</p>
                         </div>
-                        <div class="card card-accent card-purple" style="padding: 20px;">
-                            <span class="badge badge-purple" style="margin-bottom: 8px;">STEP 2</span>
-                            <h4>Dynamic Noise PSD Update</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">During <strong>silence frames</strong>: update noise estimate with exponential average. During <strong>speech frames</strong>: freeze noise estimate.</p>
+                        <div class="card card-accent card-purple" style="padding: 24px;">
+                            <span class="badge badge-purple">STEP 2</span>
+                            <h4 style="margin: 10px 0;">Dynamic Noise PSD Update</h4>
+                            <p style="color: var(--text-secondary); font-size: 16px;">Updates noise profile only during silence frames using exponential average.</p>
                         </div>
-                        <div class="card card-accent card-cyan" style="padding: 20px;">
-                            <span class="badge badge-green" style="margin-bottom: 8px;">STEP 3</span>
-                            <h4>Adaptive β(t) Oversubtraction</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Low SNR → β = 3.0 (aggressive). High SNR → β = 1.0 (preserve speech). Sigmoid-mapped per frame.</p>
-                        </div>
-                        <div class="card card-accent card-pink" style="padding: 20px;">
-                            <span class="badge badge-pink" style="margin-bottom: 8px;">STEP 4</span>
-                            <h4>Wiener Gain Application</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">H(f,t) = max(|Y|² - β·Pnn, 0) / |Y|² → smooth multiplicative gain, minimal musical noise.</p>
+                        <div class="card card-accent card-cyan" style="padding: 24px;">
+                            <span class="badge badge-cyan">STEP 3</span>
+                            <h4 style="margin: 10px 0;">Adaptive Oversubtraction β(t)</h4>
+                            <p style="color: var(--text-secondary); font-size: 16px;">Dynamically scales β between 1.0 (clean) and 3.0 (noisy) based on frame SNR.</p>
                         </div>
                     </div>
-                    <div class="flex-col gap-sm" style="justify-content: center;">
-                        <div class="equation-box" style="font-size: 14px; text-align: left; padding: 20px; line-height: 2.2;">
-                            <div style="margin-bottom: 4px; color: var(--text-secondary); font-size: 11px;">// VAD Decision</div>
-                            <div>Speech = (E_t > θ_E) AND (H_t < θ_H)</div>
-                            <div style="margin: 8px 0; border-top: 1px solid rgba(79,143,255,0.15);"></div>
-                            <div style="margin-bottom: 4px; color: var(--text-secondary); font-size: 11px;">// Noise PSD Update</div>
-                            <div>P_nn(t) = α · P_nn(t-1) + (1-α) · |Y(f,t)|²</div>
-                            <div style="margin: 8px 0; border-top: 1px solid rgba(79,143,255,0.15);"></div>
-                            <div style="margin-bottom: 4px; color: var(--text-secondary); font-size: 11px;">// Adaptive Beta</div>
-                            <div>β(t) = β_max − (SNR_t+5)/25 · (β_max − β_min)</div>
-                            <div style="margin: 8px 0; border-top: 1px solid rgba(79,143,255,0.15);"></div>
-                            <div style="margin-bottom: 4px; color: var(--text-secondary); font-size: 11px;">// Wiener Gain</div>
-                            <div>H(f,t) = max(|Y|² − β·P_nn, 0) / |Y|²</div>
+                    <div class="equation-box">
+                        <div style="color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 8px;">// Adaptive Gain Function</div>
+                        <div style="font-size: 24px; color: var(--text-primary); margin-bottom: 20px;">
+                            H(f,t) = <span style="color: var(--accent-pink);">max</span>(|Y(f,t)|² - <span style="color: var(--accent-cyan);">β(t)</span>·P_nn(f,t), 0) / |Y(f,t)|²
                         </div>
-                        <div class="card" style="text-align: center; padding: 16px; background: rgba(6, 214, 160, 0.05); border-color: rgba(6, 214, 160, 0.15);">
-                            <p style="font-size: 14px; color: var(--accent-cyan); font-weight: 600;">
-                                ★ Key Innovation: Continuous noise tracking without speech contamination
+                        <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px;">
+                            <p style="color: var(--text-secondary); font-size: 16px; font-family: 'Outfit';">
+                                ★ <strong>The Innovation:</strong> Continuous noise tracking without speech contamination, eliminating musical noise artifacts.
                             </p>
                         </div>
                     </div>
@@ -929,94 +649,73 @@
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 10: METHODOLOGY - TESTING -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="9">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="w-full flex-col gap-lg">
+        <!-- SLIDE 8: TESTING FRAMEWORK -->
+        <div class="slide" data-slide="7">
+            <div class="w-full flex-col gap-lg" style="max-width: 1200px;">
                 <div class="animate-in">
                     <div class="label">Methodology</div>
                     <h2>Testing <span class="gradient-text-3">Framework</span></h2>
                 </div>
                 <div class="grid-3 animate-in">
-                    <div class="card" style="text-align: center; padding: 28px;">
-                        <h3 style="color: var(--accent-blue);">4</h3>
-                        <div class="stat-label" style="margin-bottom: 16px;">Noise Types</div>
-                        <ul class="bullet-list" style="text-align: left; font-size: 15px;">
-                            <li><strong>White Noise</strong> (Stationary)</li>
-                            <li><strong>Fan/AC Hum</strong> (Stationary)</li>
-                            <li><strong>Street Traffic</strong> (Non-stationary)</li>
-                            <li><strong>Cafe Babble</strong> (Non-stationary)</li>
+                    <div class="card text-center" style="padding: 40px 30px;">
+                        <h1 style="color: var(--accent-blue); font-size: 80px;">4</h1>
+                        <h3 style="margin-bottom: 20px;">Noise Types</h3>
+                        <ul class="bullet-list" style="text-align: left;">
+                            <li>White Noise (Stationary)</li>
+                            <li>Fan/AC Hum (Stationary)</li>
+                            <li>Street Traffic (Non-stat)</li>
+                            <li>Cafe Babble (Non-stat)</li>
                         </ul>
                     </div>
-                    <div class="card" style="text-align: center; padding: 28px;">
-                        <h3 style="color: var(--accent-purple);">3</h3>
-                        <div class="stat-label" style="margin-bottom: 16px;">SNR Levels</div>
-                        <div style="text-align: left;">
-                            <div class="comparison-row" style="margin-bottom: 8px; padding: 12px 16px;">
-                                <span style="font-weight: 700; width: 60px; color: var(--accent-red);">−5 dB</span>
-                                <span style="font-size: 13px; color: var(--text-secondary);">Noise louder than speech</span>
-                            </div>
-                            <div class="comparison-row" style="margin-bottom: 8px; padding: 12px 16px;">
-                                <span style="font-weight: 700; width: 60px; color: var(--accent-yellow);">0 dB</span>
-                                <span style="font-size: 13px; color: var(--text-secondary);">Equal power</span>
-                            </div>
-                            <div class="comparison-row" style="padding: 12px 16px;">
-                                <span style="font-weight: 700; width: 60px; color: var(--accent-cyan);">10 dB</span>
-                                <span style="font-size: 13px; color: var(--text-secondary);">Moderate background</span>
-                            </div>
-                        </div>
+                    <div class="card text-center" style="padding: 40px 30px;">
+                        <h1 style="color: var(--accent-purple); font-size: 80px;">3</h1>
+                        <h3 style="margin-bottom: 20px;">SNR Levels</h3>
+                        <ul class="bullet-list" style="text-align: left;">
+                            <li><strong>-5 dB</strong> (Heavy noise)</li>
+                            <li><strong>0 dB</strong> (Equal power)</li>
+                            <li><strong>10 dB</strong> (Light noise)</li>
+                        </ul>
                     </div>
-                    <div class="card" style="text-align: center; padding: 28px;">
-                        <h3 style="color: var(--accent-cyan);">2</h3>
-                        <div class="stat-label" style="margin-bottom: 16px;">ASR Engines</div>
-                        <div class="card" style="margin-bottom: 12px; padding: 16px;">
-                            <h4 style="font-size: 16px;">Google Cloud STT</h4>
-                            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Online · High accuracy · ~1000ms</p>
-                        </div>
-                        <div class="card" style="padding: 16px;">
-                            <h4 style="font-size: 16px;">Vosk (Offline)</h4>
-                            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Edge · Local · ~120ms</p>
-                        </div>
+                    <div class="card text-center" style="padding: 40px 30px;">
+                        <h1 style="color: var(--accent-cyan); font-size: 80px;">2</h1>
+                        <h3 style="margin-bottom: 20px;">ASR Engines</h3>
+                        <ul class="bullet-list" style="text-align: left;">
+                            <li><strong>Google STT</strong> (Online)</li>
+                            <li><strong>Vosk</strong> (Offline Edge)</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="animate-in" style="text-align: center;">
-                    <div class="equation-box" style="display: inline-block;">
-                        Total Test Conditions: 4 noise × 3 SNR × 2 engines = <strong>24 evaluation scenarios</strong>
-                    </div>
+                <div class="animate-in card" style="text-align: center; background: rgba(0, 240, 255, 0.05); border-color: rgba(0, 240, 255, 0.3);">
+                    <h3 style="color: var(--accent-blue);">Total Evaluation Scenarios: 24</h3>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 11: RESULTS - ONLINE CHART -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="10">
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="w-full flex-col gap-md">
+        <!-- SLIDE 9: RESULTS ONLINE -->
+        <div class="slide" data-slide="8">
+            <div class="w-full flex-col gap-md" style="max-width: 1200px;">
                 <div class="animate-in">
-                    <div class="label">Results & Discussion</div>
-                    <h2>Online ASR <span class="gradient-text">Accuracy</span> <span style="font-size: 20px; color: var(--text-secondary);">(Google Cloud STT)</span></h2>
+                    <div class="label">Results</div>
+                    <h2>Online ASR <span class="gradient-text">Accuracy</span></h2>
                 </div>
-                <div class="grid-2 animate-in">
-                    <div class="card" style="padding: 24px;">
-                        <h4 style="margin-bottom: 16px; font-size: 16px;">Average Accuracy Across All Conditions</h4>
+                <div class="grid-2 animate-in" style="align-items: center;">
+                    <div class="card">
+                        <h4 style="margin-bottom: 20px; color: var(--text-secondary);">Google Cloud STT (Averaged)</h4>
                         <div class="chart-container-lg">
-                            <canvas id="onlineChart"></canvas>
+                            <canvas id="chart1"></canvas>
                         </div>
                     </div>
-                    <div class="flex-col gap-sm" style="justify-content: center;">
-                        <div class="card stat-box" style="background: rgba(6, 214, 160, 0.06); border-color: rgba(6, 214, 160, 0.2);">
-                            <div class="stat-number" style="color: var(--accent-cyan); font-size: 64px;">88.8%</div>
+                    <div class="flex-col gap-md">
+                        <div class="card stat-box" style="background: rgba(0,240,255,0.05); border-color: var(--accent-blue);">
+                            <div class="stat-number gradient-text" style="font-size: 80px;">88.8%</div>
                             <div class="stat-label">VGDWF Average Accuracy</div>
                         </div>
-                        <div class="card" style="padding: 20px;">
-                            <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--accent-blue);">Key Findings</h4>
-                            <ul class="bullet-list" style="font-size: 14px;">
-                                <li><strong>+8.5%</strong> over best baseline (Spectral Gating: 80.3%)</li>
-                                <li><strong>+20%</strong> in Cafe noise at -5dB over Static Wiener</li>
-                                <li>98% peak accuracy with fan noise at 10dB SNR</li>
+                        <div class="card">
+                            <h4 style="margin-bottom: 15px; color: var(--accent-blue);">Insights</h4>
+                            <ul class="bullet-list">
+                                <li><strong>+8.5%</strong> over best baseline (Gating: 80.3%)</li>
+                                <li><strong>+20%</strong> in Cafe noise at -5dB over Wiener</li>
+                                <li>Outperforms all 5 baselines universally</li>
                             </ul>
                         </div>
                     </div>
@@ -1024,34 +723,31 @@
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 12: RESULTS - OFFLINE CHART -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="11">
-            <div class="bg-orb bg-orb-3"></div>
-            <div class="w-full flex-col gap-md">
+        <!-- SLIDE 10: RESULTS OFFLINE -->
+        <div class="slide" data-slide="9">
+            <div class="w-full flex-col gap-md" style="max-width: 1200px;">
                 <div class="animate-in">
-                    <div class="label">Results & Discussion</div>
-                    <h2>Offline ASR <span class="gradient-text-2">Accuracy</span> <span style="font-size: 20px; color: var(--text-secondary);">(Vosk — Edge Deployment)</span></h2>
+                    <div class="label">Results</div>
+                    <h2>Offline Edge <span class="gradient-text-2">Accuracy</span></h2>
                 </div>
-                <div class="grid-2 animate-in">
-                    <div class="card" style="padding: 24px;">
-                        <h4 style="margin-bottom: 16px; font-size: 16px;">Average Accuracy Across All Conditions</h4>
+                <div class="grid-2 animate-in" style="align-items: center;">
+                    <div class="card">
+                        <h4 style="margin-bottom: 20px; color: var(--text-secondary);">Vosk Local Engine (Averaged)</h4>
                         <div class="chart-container-lg">
-                            <canvas id="offlineChart"></canvas>
+                            <canvas id="chart2"></canvas>
                         </div>
                     </div>
-                    <div class="flex-col gap-sm" style="justify-content: center;">
-                        <div class="card stat-box" style="background: rgba(79, 143, 255, 0.06); border-color: rgba(79, 143, 255, 0.2);">
-                            <div class="stat-number" style="color: var(--accent-blue); font-size: 64px;">83.5%</div>
+                    <div class="flex-col gap-md">
+                        <div class="card stat-box" style="background: rgba(6,214,160,0.05); border-color: var(--accent-cyan);">
+                            <div class="stat-number gradient-text-2" style="font-size: 80px;">83.5%</div>
                             <div class="stat-label">VGDWF Offline Accuracy</div>
                         </div>
-                        <div class="card" style="padding: 20px;">
-                            <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--accent-purple);">Edge Deployment Viability</h4>
-                            <ul class="bullet-list" style="font-size: 14px;">
-                                <li><strong>~120ms</strong> local latency (vs. ~1000ms cloud)</li>
-                                <li><strong>Zero internet</strong> required — works during outages</li>
-                                <li><strong>Only ~5%</strong> gap vs. online — negligible for home use</li>
+                        <div class="card">
+                            <h4 style="margin-bottom: 15px; color: var(--accent-cyan);">Edge Viability</h4>
+                            <ul class="bullet-list">
+                                <li>Only <strong>~5% gap</strong> compared to Cloud STT</li>
+                                <li><strong>8x lower latency</strong> (~120ms vs 1000ms)</li>
+                                <li>100% Privacy preserved locally</li>
                             </ul>
                         </div>
                     </div>
@@ -1059,283 +755,51 @@
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 13: RESULTS - NOISE COMPARISON -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="12">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="w-full flex-col gap-md">
-                <div class="animate-in">
-                    <div class="label">Results & Discussion</div>
-                    <h2>Stationary vs. Non-Stationary <span class="gradient-text-3">Noise</span></h2>
-                </div>
-                <div class="grid-2 animate-in">
-                    <div class="card" style="padding: 24px;">
-                        <h4 style="margin-bottom: 16px; font-size: 16px;">Performance at -5dB SNR (Hardest Condition)</h4>
-                        <div class="chart-container-lg">
-                            <canvas id="noiseCompareChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="flex-col gap-md" style="justify-content: center;">
-                        <div class="card card-accent card-blue" style="padding: 20px;">
-                            <h4 style="font-size: 16px;">Stationary Noise (White, Fan)</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px; line-height: 1.6;">
-                                Traditional filters perform reasonably well because noise profile is constant. VGDWF still leads by <strong style="color: var(--accent-cyan);">10-15%</strong> due to adaptive β(t).
-                            </p>
-                        </div>
-                        <div class="card card-accent card-pink" style="padding: 20px;">
-                            <h4 style="font-size: 16px;">Non-Stationary Noise (Street, Cafe) ★</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px; line-height: 1.6;">
-                                Static methods collapse — their initial noise profile becomes obsolete. VGDWF's dynamic noise tracking produces <strong style="color: var(--accent-cyan);">~20% improvement</strong> in Cafe noise at -5dB.
-                            </p>
-                        </div>
-                        <div class="card card-accent card-cyan" style="padding: 20px;">
-                            <h4 style="font-size: 16px;">Butterworth Limitation</h4>
-                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px; line-height: 1.6;">
-                                Cannot suppress in-band noise (80Hz–4kHz). Fan hum and babble fall directly within the speech band.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- SLIDE 14: RESULTS - ONLINE VS OFFLINE -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="13">
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="w-full flex-col gap-md">
-                <div class="animate-in">
-                    <div class="label">Results & Discussion</div>
-                    <h2>Online vs. Offline <span class="gradient-text">Engine Comparison</span></h2>
-                </div>
-                <div class="grid-2 animate-in">
-                    <div class="card" style="padding: 24px;">
-                        <div class="chart-container-lg">
-                            <canvas id="engineCompareChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="flex-col gap-md" style="justify-content: center;">
-                        <div class="grid-2">
-                            <div class="card stat-box" style="border-top: 3px solid var(--accent-blue);">
-                                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 4px;">ONLINE</div>
-                                <div class="stat-number" style="font-size: 44px; color: var(--accent-blue);">88.8%</div>
-                                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">~1000ms latency</div>
-                            </div>
-                            <div class="card stat-box" style="border-top: 3px solid var(--accent-cyan);">
-                                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 4px;">OFFLINE</div>
-                                <div class="stat-number" style="font-size: 44px; color: var(--accent-cyan);">83.5%</div>
-                                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">~120ms latency</div>
-                            </div>
-                        </div>
-                        <div class="card" style="padding: 20px; background: rgba(6, 214, 160, 0.05); border-color: rgba(6, 214, 160, 0.15); text-align: center;">
-                            <p style="font-size: 18px; color: var(--accent-cyan); font-weight: 700;">
-                                Gap: Only ~5.3%
-                            </p>
-                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 8px;">
-                                Negligible for home automation use — offline is production-viable
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- SLIDE 15: CONCLUSIONS -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="14">
-            <div class="bg-orb bg-orb-3"></div>
-            <div class="w-full flex-col gap-lg" style="max-width: 950px;">
+        <!-- SLIDE 11: CONCLUSIONS -->
+        <div class="slide" data-slide="10">
+            <div class="w-full flex-col gap-lg" style="max-width: 1100px;">
                 <div class="animate-in">
                     <div class="label">Conclusions</div>
-                    <h2>Key <span class="gradient-text-2">Conclusions</span></h2>
+                    <h2>Key <span class="gradient-text-3">Takeaways</span></h2>
                 </div>
                 <div class="flex-col gap-md animate-in">
-                    <div class="card" style="padding: 24px; display: flex; gap: 20px; align-items: center;">
-                        <div style="font-size: 40px;">🏆</div>
+                    <div class="card" style="display: flex; gap: 30px; align-items: center;">
+                        <div style="font-size: 50px;">🏆</div>
                         <div>
-                            <h4>VGDWF outperforms all 5 baselines in every test condition</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">88.8% online / 83.5% offline — the highest accuracy achieved across 24 evaluation scenarios.</p>
+                            <h3 style="margin-bottom: 8px;">VGDWF is superior</h3>
+                            <p style="color: var(--text-secondary); font-size: 18px;">Outperforms all baselines in every scenario, specifically resolving non-stationary noise failures.</p>
                         </div>
                     </div>
-                    <div class="card" style="padding: 24px; display: flex; gap: 20px; align-items: center;">
-                        <div style="font-size: 40px;">🏠</div>
+                    <div class="card" style="display: flex; gap: 30px; align-items: center;">
+                        <div style="font-size: 50px;">🏠</div>
                         <div>
-                            <h4>Offline Vosk + VGDWF = optimal edge architecture</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">Low latency (~120ms), zero cost, no cloud dependency, and full privacy preservation.</p>
+                            <h3 style="margin-bottom: 8px;">Offline edge architecture is optimal</h3>
+                            <p style="color: var(--text-secondary); font-size: 18px;">Vosk + VGDWF on Raspberry Pi yields 83.5% accuracy with sub-200ms latency and no cloud fees.</p>
                         </div>
                     </div>
-                    <div class="card" style="padding: 24px; display: flex; gap: 20px; align-items: center;">
-                        <div style="font-size: 40px;">🔐</div>
+                    <div class="card" style="display: flex; gap: 30px; align-items: center;">
+                        <div style="font-size: 50px;">🔐</div>
                         <div>
-                            <h4>ECAPA-TDNN ensures secure biometric access control</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">Prevents unauthorized users from controlling the home via voice commands.</p>
-                        </div>
-                    </div>
-                    <div class="card" style="padding: 24px; display: flex; gap: 20px; align-items: center;">
-                        <div style="font-size: 40px;">🌍</div>
-                        <div>
-                            <h4>Sinhala voice automation is production-viable</h4>
-                            <p style="color: var(--text-secondary); font-size: 15px; margin-top: 4px;">Demonstrated that low-resource language ASR systems can achieve robust performance with proper noise handling.</p>
+                            <h3 style="margin-bottom: 8px;">Biometrics resolve security gaps</h3>
+                            <p style="color: var(--text-secondary); font-size: 18px;">ECAPA-TDNN effectively prevents unauthorized users from actuating smart home devices.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- SLIDE 16: FUTURE WORK -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="15">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="w-full flex-col gap-lg" style="max-width: 950px;">
-                <div class="animate-in">
-                    <div class="label">Future Work</div>
-                    <h2>Further <span class="gradient-text-3">Recommendations</span></h2>
-                </div>
-                <div class="grid-2 animate-in">
-                    <div class="card card-accent card-blue" style="padding: 28px;">
-                        <div style="font-size: 32px; margin-bottom: 12px;">🤖</div>
-                        <h4>Fine-Tuned Whisper ASR</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; margin-top: 8px; line-height: 1.6;">
-                            Replace Vosk with a Sinhala fine-tuned OpenAI Whisper model once RPi hardware improves to support larger models.
-                        </p>
-                    </div>
-                    <div class="card card-accent card-purple" style="padding: 28px;">
-                        <div style="font-size: 32px; margin-bottom: 12px;">🎙️</div>
-                        <h4>Multi-Channel Beamforming</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; margin-top: 8px; line-height: 1.6;">
-                            Extend VGDWF to microphone array beamforming for spatial noise cancellation in larger rooms.
-                        </p>
-                    </div>
-                    <div class="card card-accent card-cyan" style="padding: 28px;">
-                        <div style="font-size: 32px; margin-bottom: 12px;">📚</div>
-                        <h4>Continuous Learning</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; margin-top: 8px; line-height: 1.6;">
-                            Allow the system to learn user-specific noise profiles over time (e.g., "my kitchen is always noisy at 6pm").
-                        </p>
-                    </div>
-                    <div class="card card-accent card-pink" style="padding: 28px;">
-                        <div style="font-size: 32px; margin-bottom: 12px;">🏠</div>
-                        <h4>Full Smart Home Expansion</h4>
-                        <p style="color: var(--text-secondary); font-size: 15px; margin-top: 8px; line-height: 1.6;">
-                            Expand command vocabulary to HVAC control, smart locks, security cameras, and multi-room automation.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- SLIDE 17: PROJECT MANAGEMENT -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="16">
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="w-full flex-col gap-lg">
-                <div class="animate-in">
-                    <div class="label">Project Management</div>
-                    <h2>Development <span class="gradient-text">Timeline</span></h2>
-                </div>
-                <div class="grid-2 animate-in">
-                    <div style="padding-left: 40px;">
-                        <div class="timeline">
-                            <div class="timeline-item">
-                                <h4 style="font-size: 16px;">Phase 1 — Research & Literature</h4>
-                                <p style="font-size: 14px; color: var(--text-secondary);">DSP theory, Sinhala phonetics, existing systems review</p>
-                            </div>
-                            <div class="timeline-item">
-                                <h4 style="font-size: 16px;">Phase 2 — Baseline Implementation</h4>
-                                <p style="font-size: 14px; color: var(--text-secondary);">5 noise reduction methods coded from first principles</p>
-                            </div>
-                            <div class="timeline-item">
-                                <h4 style="font-size: 16px;">Phase 3 — VGDWF Design & Testing</h4>
-                                <p style="font-size: 14px; color: var(--text-secondary);">Custom algorithm, 24-scenario evaluation framework</p>
-                            </div>
-                            <div class="timeline-item">
-                                <h4 style="font-size: 16px;">Phase 4 — Edge Deployment</h4>
-                                <p style="font-size: 14px; color: var(--text-secondary);">Raspberry Pi 4 integration, ESP32 relay wiring, MQTT</p>
-                            </div>
-                            <div class="timeline-item">
-                                <h4 style="font-size: 16px;">Phase 5 — Report & Defence</h4>
-                                <p style="font-size: 14px; color: var(--text-secondary);">Thesis writing, web dashboard, presentation prep</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-col gap-sm">
-                        <div class="card" style="padding: 20px;">
-                            <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--accent-blue);">Challenges & Mitigations</h4>
-                            <table class="data-table" style="font-size: 13px;">
-                                <thead><tr><th>Challenge</th><th>Mitigation</th></tr></thead>
-                                <tbody>
-                                    <tr><td>RPi resource limits</td><td class="highlight">Vosk + single-channel DSP</td></tr>
-                                    <tr><td>Sinhala ASR accuracy</td><td class="highlight">Distinct phonetic commands</td></tr>
-                                    <tr><td>Non-stationary noise</td><td class="highlight">VGDWF dynamic tracking</td></tr>
-                                    <tr><td>False speaker accepts</td><td class="highlight">ECAPA-TDNN threshold tuning</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="card" style="padding: 20px;">
-                            <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--accent-purple);">Technology Stack</h4>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <span class="badge badge-blue">Python</span>
-                                <span class="badge badge-purple">TensorFlow Lite</span>
-                                <span class="badge badge-green">SpeechBrain</span>
-                                <span class="badge badge-pink">React.js</span>
-                                <span class="badge badge-blue">Flask</span>
-                                <span class="badge badge-purple">MQTT</span>
-                                <span class="badge badge-green">Vosk</span>
-                                <span class="badge badge-pink">Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- SLIDE 18: THANK YOU -->
-        <!-- ============================================ -->
-        <div class="slide" data-slide="17">
-            <div class="bg-orb bg-orb-1"></div>
-            <div class="bg-orb bg-orb-2"></div>
-            <div class="bg-orb bg-orb-3"></div>
+        <!-- SLIDE 12: Q&A -->
+        <div class="slide" data-slide="11">
             <div class="text-center flex-col gap-md" style="align-items: center;">
-                <div class="animate-in">
-                    <div class="label">Thank You</div>
-                </div>
-                <h1 class="animate-in">
+                <div class="animate-in"><div class="label">Thank You</div></div>
+                <h1 class="animate-in" style="font-size: 80px;">
                     <span class="gradient-text">Questions?</span>
                 </h1>
-                <p class="subtitle animate-in" style="margin-top: 12px;">
-                    Thank you for your time and attention. I am happy to answer any questions about the system architecture, the VGDWF algorithm, or the experimental results.
+                <p class="subtitle animate-in" style="margin-top: 20px; font-size: 24px;">
+                    Thank you for your time. I am happy to discuss the VGDWF algorithm, methodology, or system architecture.
                 </p>
-                <div class="animate-in" style="margin-top: 40px; display: flex; gap: 24px;">
-                    <div class="card stat-box" style="padding: 20px 32px;">
-                        <div class="stat-number" style="font-size: 36px; color: var(--accent-cyan);">88.8%</div>
-                        <div class="stat-label">Online</div>
-                    </div>
-                    <div class="card stat-box" style="padding: 20px 32px;">
-                        <div class="stat-number" style="font-size: 36px; color: var(--accent-blue);">83.5%</div>
-                        <div class="stat-label">Offline</div>
-                    </div>
-                    <div class="card stat-box" style="padding: 20px 32px;">
-                        <div class="stat-number" style="font-size: 36px; color: var(--accent-purple);">120ms</div>
-                        <div class="stat-label">Latency</div>
-                    </div>
-                    <div class="card stat-box" style="padding: 20px 32px;">
-                        <div class="stat-number" style="font-size: 36px; color: var(--accent-pink);">Novel</div>
-                        <div class="stat-label">VGDWF</div>
-                    </div>
-                </div>
-                <div class="animate-in" style="margin-top: 40px;">
-                    <p style="font-size: 14px; color: var(--text-secondary);">
-                        Kasundi Perera · [Student ID] · Supervised by [Supervisor Name] · June 2026
-                    </p>
-                    <p style="font-size: 12px; color: rgba(255,255,255,0.2); margin-top: 8px;">
-                        Repository: github.com/kasundisandalika-netizen/Sinhala-Voice-Project
-                    </p>
+                <div class="animate-in card" style="margin-top: 40px; background: rgba(0,240,255,0.05); border-color: rgba(0,240,255,0.3);">
+                    <h3 style="color: var(--accent-blue); font-family: 'JetBrains Mono', monospace;">Live Demo Ready</h3>
                 </div>
             </div>
         </div>
@@ -1344,223 +808,223 @@
 
     <script>
         // ==========================================
-        // SLIDE NAVIGATION
+        // THREE.JS 3D BACKGROUND (Network Particles)
+        // ==========================================
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            // Fog matches background color to fade particles
+            scene.fog = new THREE.FogExp2(0x05050a, 0.001);
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
+            camera.position.z = 1000;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            // Particles
+            const geometry = new THREE.BufferGeometry();
+            const particlesCount = 800;
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorsArray = new Float32Array(particlesCount * 3);
+
+            const color1 = new THREE.Color(0x00f0ff); // Blue
+            const color2 = new THREE.Color(0xb026ff); // Purple
+            
+            for(let i = 0; i < particlesCount * 3; i+=3) {
+                // Sphere distribution
+                const r = 1500 * Math.cbrt(Math.random());
+                const theta = Math.random() * 2 * Math.PI;
+                const phi = Math.acos(2 * Math.random() - 1);
+                
+                posArray[i] = r * Math.sin(phi) * Math.cos(theta);
+                posArray[i+1] = r * Math.sin(phi) * Math.sin(theta);
+                posArray[i+2] = r * Math.cos(phi);
+
+                // Mix colors
+                const mixedColor = color1.clone().lerp(color2, Math.random());
+                colorsArray[i] = mixedColor.r;
+                colorsArray[i+1] = mixedColor.g;
+                colorsArray[i+2] = mixedColor.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+
+            // Custom glowing material
+            const material = new THREE.PointsMaterial({
+                size: 4,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particlesMesh = new THREE.Points(geometry, material);
+            scene.add(particlesMesh);
+
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
+
+                targetX = mouseX * 0.001;
+                targetY = mouseY * 0.001;
+
+                particlesMesh.rotation.y += 0.0005;
+                particlesMesh.rotation.x += 0.0002;
+
+                // Smooth camera movement following mouse
+                camera.position.x += (mouseX - camera.position.x) * 0.02;
+                camera.position.y += (-mouseY - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                // Undulate particles
+                const positions = particlesMesh.geometry.attributes.position.array;
+                for(let i = 0; i < particlesCount; i++) {
+                    const i3 = i * 3;
+                    const x = positions[i3];
+                    // small sine wave movement
+                    positions[i3+1] += Math.sin(elapsedTime + x) * 0.5;
+                }
+                particlesMesh.geometry.attributes.position.needsUpdate = true;
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // ==========================================
+        // SLIDE ENGINE & LOGIC
         // ==========================================
         let currentSlide = 0;
-        const totalSlides = 18;
         const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
         const progressBar = document.getElementById('progressBar');
         const slideNumber = document.getElementById('slideNumber');
+
+        // Init Setup
+        window.onload = () => {
+            initThreeJS();
+            
+            // Remove Loader after delay
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.visibility = 'hidden', 1000);
+            }, 1500);
+
+            progressBar.style.width = (1 / totalSlides * 100) + '%';
+            slideNumber.textContent = `1 / ${totalSlides}`;
+        };
 
         function goToSlide(n) {
             if (n < 0 || n >= totalSlides || n === currentSlide) return;
 
+            // Determine direction for 3D exit animation
+            const dir = n > currentSlide ? 'exit-up' : 'exit-down';
+            
             slides[currentSlide].classList.remove('active');
-            slides[currentSlide].classList.add(n > currentSlide ? 'exit-up' : '');
+            slides[currentSlide].classList.add(dir);
 
             currentSlide = n;
-            slides.forEach(s => { s.classList.remove('exit-up'); });
-            slides[currentSlide].classList.add('active');
+            
+            // Reset entry states
+            slides.forEach(s => { 
+                if(s !== slides[currentSlide]) {
+                    s.classList.remove('exit-up', 'exit-down'); 
+                }
+            });
+            
+            // Activate new slide (triggers CSS animations)
+            setTimeout(() => {
+                slides[currentSlide].classList.remove('exit-up', 'exit-down');
+                slides[currentSlide].classList.add('active');
+            }, 50);
 
+            // Update HUD
             progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
             slideNumber.textContent = `${currentSlide + 1} / ${totalSlides}`;
 
-            // Trigger chart render if needed
-            if (currentSlide === 10) renderOnlineChart();
-            if (currentSlide === 11) renderOfflineChart();
-            if (currentSlide === 12) renderNoiseCompareChart();
-            if (currentSlide === 13) renderEngineCompareChart();
+            // Lazy Load Charts
+            if (currentSlide === 8) renderChart1();
+            if (currentSlide === 9) renderChart2();
         }
 
+        // Controls
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') {
-                e.preventDefault();
-                goToSlide(currentSlide + 1);
-            }
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                goToSlide(currentSlide - 1);
-            }
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') goToSlide(currentSlide + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goToSlide(currentSlide - 1);
         });
 
-        // Touch navigation
-        let touchStartX = 0;
-        document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-        document.addEventListener('touchend', e => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) { diff > 0 ? goToSlide(currentSlide + 1) : goToSlide(currentSlide - 1); }
-        });
-
-        // Click navigation (left/right halves)
         document.addEventListener('click', (e) => {
-            if (e.target.closest('button, input, a, .card')) return;
-            if (e.clientX > window.innerWidth / 2) goToSlide(currentSlide + 1);
-            else goToSlide(currentSlide - 1);
+            if (e.target.closest('button, a, .card, .key-btn')) return;
+            e.clientX > window.innerWidth / 2 ? goToSlide(currentSlide + 1) : goToSlide(currentSlide - 1);
         });
 
-        // Init progress
-        progressBar.style.width = (1 / totalSlides * 100) + '%';
-
         // ==========================================
-        // CHART.JS CONFIGURATIONS
+        // CHART.JS RENDERERS
         // ==========================================
-        const chartDefaults = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: 'rgba(10, 10, 26, 0.9)',
-                    borderColor: 'rgba(79, 143, 255, 0.3)',
-                    borderWidth: 1,
-                    titleFont: { family: 'Inter', weight: '600' },
-                    bodyFont: { family: 'JetBrains Mono', size: 12 },
-                    padding: 12,
-                    cornerRadius: 8,
-                }
-            },
+        Chart.defaults.color = '#a0a0c0';
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+        
+        const chartOptions = {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
             scales: {
-                x: {
-                    grid: { color: 'rgba(255,255,255,0.03)' },
-                    ticks: { color: '#9090b0', font: { family: 'Inter', size: 12, weight: '600' } }
-                },
-                y: {
-                    grid: { color: 'rgba(255,255,255,0.03)' },
-                    ticks: { color: '#9090b0', font: { family: 'JetBrains Mono', size: 11 }, callback: v => v + '%' },
-                    min: 0, max: 100
-                }
-            }
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, min: 0, max: 100, ticks: { callback: v => v + '%' } },
+                x: { grid: { display: false } }
+            },
+            animation: { duration: 2000, easing: 'easeOutElastic' }
         };
 
-        const methodLabels = ['Unfiltered', 'SpecSub', 'Wiener', 'Wavelet', 'Gating', 'Butter.', 'VGDWF'];
-        const barColors = ['#ef4444', '#6b7280', '#6b7280', '#6b7280', '#6b7280', '#6b7280', '#06d6a0'];
-        const barBorders = ['#ef4444', '#9ca3af', '#9ca3af', '#9ca3af', '#9ca3af', '#9ca3af', '#06d6a0'];
+        const labels = ['Raw', 'SpecSub', 'Wiener', 'Wavelet', 'Gating', 'Butter', 'VGDWF'];
+        const colors = ['#ff2a7a', '#3f3f5a', '#3f3f5a', '#3f3f5a', '#3f3f5a', '#3f3f5a', '#00f0ff'];
 
-        let onlineChartInstance, offlineChartInstance, noiseCompareInstance, engineCompareInstance;
+        let c1, c2;
 
-        function renderOnlineChart() {
-            if (onlineChartInstance) return;
-            const ctx = document.getElementById('onlineChart').getContext('2d');
-            onlineChartInstance = new Chart(ctx, {
+        function renderChart1() {
+            if(c1) return;
+            const ctx = document.getElementById('chart1').getContext('2d');
+            c1 = new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: methodLabels,
-                    datasets: [{
-                        data: [57.5, 75.4, 77.3, 78.8, 80.3, 66.1, 88.8],
-                        backgroundColor: barColors,
-                        borderColor: barBorders,
-                        borderWidth: 1,
-                        borderRadius: 6,
-                    }]
-                },
-                options: { ...chartDefaults, animation: { duration: 1200, easing: 'easeOutQuart' } }
+                data: { labels, datasets: [{ data: [57.5, 75.4, 77.3, 78.8, 80.3, 66.1, 88.8], backgroundColor: colors, borderRadius: 8 }] },
+                options: chartOptions
             });
         }
 
-        function renderOfflineChart() {
-            if (offlineChartInstance) return;
-            const ctx = document.getElementById('offlineChart').getContext('2d');
-            offlineChartInstance = new Chart(ctx, {
+        function renderChart2() {
+            if(c2) return;
+            const ctx = document.getElementById('chart2').getContext('2d');
+            const colors2 = ['#ff2a7a', '#3f3f5a', '#3f3f5a', '#3f3f5a', '#3f3f5a', '#3f3f5a', '#06d6a0'];
+            c2 = new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: methodLabels,
-                    datasets: [{
-                        data: [52.5, 70.8, 72.7, 74.3, 75.9, 61.4, 83.5],
-                        backgroundColor: ['#ef4444', '#6b7280', '#6b7280', '#6b7280', '#6b7280', '#6b7280', '#4f8fff'],
-                        borderColor: ['#ef4444', '#9ca3af', '#9ca3af', '#9ca3af', '#9ca3af', '#9ca3af', '#4f8fff'],
-                        borderWidth: 1,
-                        borderRadius: 6,
-                    }]
-                },
-                options: { ...chartDefaults, animation: { duration: 1200, easing: 'easeOutQuart' } }
-            });
-        }
-
-        function renderNoiseCompareChart() {
-            if (noiseCompareInstance) return;
-            const ctx = document.getElementById('noiseCompareChart').getContext('2d');
-            noiseCompareInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['White', 'Fan', 'Street', 'Cafe'],
-                    datasets: [
-                        {
-                            label: 'Static Wiener',
-                            data: [68, 72, 58, 52],
-                            backgroundColor: 'rgba(107, 114, 128, 0.6)',
-                            borderColor: '#6b7280',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        },
-                        {
-                            label: 'Spectral Gating',
-                            data: [72, 76, 62, 56],
-                            backgroundColor: 'rgba(168, 85, 247, 0.5)',
-                            borderColor: '#a855f7',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        },
-                        {
-                            label: 'VGDWF (Ours)',
-                            data: [82, 85, 78, 75],
-                            backgroundColor: 'rgba(6, 214, 160, 0.6)',
-                            borderColor: '#06d6a0',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        }
-                    ]
-                },
-                options: {
-                    ...chartDefaults,
-                    plugins: {
-                        ...chartDefaults.plugins,
-                        legend: {
-                            display: true,
-                            labels: { color: '#9090b0', font: { family: 'Inter', size: 11, weight: '600' }, boxWidth: 12, padding: 16 }
-                        }
-                    },
-                    animation: { duration: 1200, easing: 'easeOutQuart' }
-                }
-            });
-        }
-
-        function renderEngineCompareChart() {
-            if (engineCompareInstance) return;
-            const ctx = document.getElementById('engineCompareChart').getContext('2d');
-            engineCompareInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: methodLabels,
-                    datasets: [
-                        {
-                            label: 'Online (Google STT)',
-                            data: [57.5, 75.4, 77.3, 78.8, 80.3, 66.1, 88.8],
-                            backgroundColor: 'rgba(79, 143, 255, 0.6)',
-                            borderColor: '#4f8fff',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        },
-                        {
-                            label: 'Offline (Vosk)',
-                            data: [52.5, 70.8, 72.7, 74.3, 75.9, 61.4, 83.5],
-                            backgroundColor: 'rgba(6, 214, 160, 0.5)',
-                            borderColor: '#06d6a0',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        }
-                    ]
-                },
-                options: {
-                    ...chartDefaults,
-                    plugins: {
-                        ...chartDefaults.plugins,
-                        legend: {
-                            display: true,
-                            labels: { color: '#9090b0', font: { family: 'Inter', size: 11, weight: '600' }, boxWidth: 12, padding: 16 }
-                        }
-                    },
-                    animation: { duration: 1200, easing: 'easeOutQuart' }
-                }
+                data: { labels, datasets: [{ data: [52.5, 70.8, 72.7, 74.3, 75.9, 61.4, 83.5], backgroundColor: colors2, borderRadius: 8 }] },
+                options: chartOptions
             });
         }
     </script>
