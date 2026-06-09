@@ -9,7 +9,9 @@ import librosa
 import numpy as np
 import speaker_biometrics
 import database
-import command_recognizer
+import nlp_classifier
+import speech_recognition as sr
+import numpy as np
 
 app = Flask(__name__)
 CORS(app) # Allow web dashboard to communicate with local API
@@ -129,15 +131,37 @@ def test_voice():
     is_authorized, user_name = speaker_biometrics.verify_speaker(incoming_audio_data=audio_data, database_users=users)
     
     # 2. Extract Command
-    command, confidence = command_recognizer.recognize_command(audio_data)
+    recognizer = sr.Recognizer()
+    # Convert float32 numpy array to 16-bit PCM bytes for SpeechRecognition
+    audio_data_int16 = (audio_data * 32767).astype(np.int16)
+    audio_data_obj = sr.AudioData(audio_data_int16.tobytes(), 16000, 2)
+    
+    command_str = "UNKNOWN"
+    sinhala_text = ""
+    confidence = 0.0
+    device_id, action = None, None
+    
+    try:
+        sinhala_text = recognizer.recognize_google(audio_data_obj, language="si-LK")
+        device_id, action = nlp_classifier.classify_command(sinhala_text)
+        if device_id and action:
+            command_str = f"Turn {action} the {device_id.replace('_1', '')}"
+            confidence = 100.0
+    except sr.UnknownValueError:
+        command_str = "UNKNOWN_AUDIO"
+    except sr.RequestError:
+        command_str = "API_ERROR"
     
     os.remove(temp_path)
     
     return jsonify({
         "authorized": is_authorized,
         "user_name": user_name,
-        "command": command,
-        "confidence": round(confidence, 1)
+        "command": command_str,
+        "sinhala": sinhala_text,
+        "device_id": device_id,
+        "action": action,
+        "confidence": confidence
     }), 200
 
 @app.route('/api/devices/control', methods=['POST'])

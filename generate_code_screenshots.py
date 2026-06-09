@@ -1,0 +1,35 @@
+import os
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import ImageFormatter
+
+# Create directory for screenshots
+out_dir = "Thesis_Code_Screenshots"
+os.makedirs(out_dir, exist_ok=True)
+
+files_to_capture = [
+    {"path": "src/main_production.py", "name": "1_Online_Pipeline_STT.png", "lexer": "python", "lines": (70, 95)},
+    {"path": "NoiseRM/main.py", "name": "2_Offline_Pipeline_Vosk.png", "lexer": "python", "lines": (50, 75)},
+    {"path": "src/speaker_biometrics.py", "name": "3_Biometric_Verification.png", "lexer": "python", "lines": (50, 75)},
+    {"path": "src/flask_api.py", "name": "4_Flask_MQTT_Integration.png", "lexer": "python", "lines": (15, 40)}
+]
+
+for file_info in files_to_capture:
+    try:
+        with open(file_info["path"], "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            
+        start, end = file_info["lines"]
+        code_snippet = "".join(lines[start:end])
+        
+        lexer = get_lexer_by_name(file_info["lexer"])
+        # Use Monokai theme for a professional "VS Code" look
+        formatter = ImageFormatter(font_size=18, style="monokai", line_numbers=True)
+        
+        out_path = os.path.join(out_dir, file_info["name"])
+        with open(out_path, "wb") as out_f:
+            out_f.write(highlight(code_snippet, lexer, formatter))
+            
+        print(f"Generated screenshot: {out_path}")
+    except Exception as e:
+        print(f"Failed to generate {file_info['name']}: {e}")

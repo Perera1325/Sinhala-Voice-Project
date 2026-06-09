@@ -1,87 +1,67 @@
-# Sinhala Voice-Controlled Smart Home Automation System
+# Kasundi AI Home Assistant
 
-An advanced, AI-powered Smart Home system built to understand **Singlish (Sinhala + English)** commands. This system uses a custom Convolutional Neural Network (CNN) deployed via TensorFlow Lite, features Speaker Biometric Security, and integrates directly with a local Flask server to control ESP32 IoT devices.
+An advanced, AI-powered Smart Home system built to understand **Singlish (Sinhala + English)** commands. This system uses a custom Convolutional Neural Network (CNN) deployed via TensorFlow Lite, features Speaker Biometric Security, and integrates directly with a local MQTT/Flask server to control ESP32 IoT devices, while keeping a real-time cloud telemetry log on Firebase.
 
 ---
 
 ## 🏗️ System Architecture
 
-This system uses a **Local Network Architecture** to ensure privacy and low latency. **All devices (Raspberry Pi, Android Phone, and ESP32s) must be connected to the SAME Wi-Fi network** for the system to work.
+This system uses a **Hybrid Architecture** combining local privacy with cloud logging.
 
-### 1. The Hub: Raspberry Pi 4
+### 1. The Hub: Raspberry Pi 4 (Local)
 The Raspberry Pi acts as the central brain of the house. It runs two main things:
-1. **Your Existing Flask Server (Port 5000):** This is the server your Android App already talks to. It listens for HTTP requests at specific endpoints (e.g., `http://192.168.1.13:5000/channels/<UUID>/control`) and triggers the ESP32s.
-2. **The Voice AI Engine (`main_production.py`):** This script runs endlessly in the background. It listens for the Wake Word, verifies the speaker's identity, classifies the command using TFLite, and then acts like a "virtual Android App" by sending the exact same HTTP requests to your Flask Server to turn the lights on/off.
+1. **The Local MQTT/API Server (`app.py` on Port 5000):** This handles incoming triggers and communicates with the actual ESP32 devices via MQTT. It also provides the endpoint `http://127.0.0.1:5000/api/devices/control` to physically turn devices on or off.
+2. **The Voice AI Engine (`main_production.py`):** This script runs endlessly in the background. It listens for the Wake Word ("Hey Kasu"), verifies the speaker's identity using biometrics, classifies the command using Google STT and our custom NLP classifier, and then sends the command to `app.py`.
 
-### 2. The Cloud: Firebase Web Dashboard
-To register new family members into the security system, we have deployed a React Web Dashboard to Firebase.
-- URL: [https://kasundi-ai-home.web.app](https://kasundi-ai-home.web.app)
-- You use this website to record a 3-second voice sample, which is processed and saved as a Voice Fingerprint in the Raspberry Pi's SQLite database.
+### 2. The Cloud: Firebase Integration
+We use Firebase for remote web access and logging:
+- **React Web Dashboard:** Hosted securely on Firebase. You use this dashboard to record a voice sample, which registers your biometric voice fingerprint securely in the database.
+  👉 **[Web Dashboard Link](https://kasundi-ai-home.web.app)**
+- **Realtime Database (Telemetry):** After a command is successfully executed locally, the Raspberry Pi sends a JSON payload to Firebase so you can monitor your home remotely.
+  👉 **[Live Telemetry Database](https://kasundi-ai-home-default-rtdb.asia-southeast1.firebasedatabase.app/)**
 
 ---
 
-## 🧠 Current AI Capabilities
+## 🧠 Core Capabilities
 
 ### 1. Voice Biometrics (Security First)
-The system will **ONLY work for registered voices**. If a stranger or unregistered person says the wake word and issues a command, the Biometrics Engine will reject it as an "Intruder" and ignore the command. 
+The system will **ONLY work for registered voices**. If an unregistered person issues a command, the Biometrics Engine will reject it as an "Intruder". 
 * **Note:** You must use the Web Dashboard to register your voice before the system will obey your commands.
 
-### 2. Supported Commands (Light Only)
-Currently, the TensorFlow Lite model (`light_model.tflite`) has been explicitly trained **only for the Light On and Light Off functions in Singlish**.
-- E.g., *"Light eka danna"*, *"Light eka on krnna"*
-- To add Fan and Curtain controls, you must record audio datasets for those devices and retrain the 7-class model.
+### 2. Advanced Noise Reduction (VGDWF)
+Our custom **VAD-Guided Dynamic Wiener Filter** cleans the audio in real time, allowing the system to understand commands even in highly noisy environments (like with a fan running or street noise).
+
+### 3. Supported Commands
+The NLP engine translates Sinhala commands via Google Speech Recognition. Try phrases like:
+- *"ලයිට් එක දාන්න"* (Turn on the light)
+- *"ලයිට් එක නිවන්න"* (Turn off the light)
+- *"ෆෑන් එක දාන්න"* (Turn on the fan)
 
 ---
 
-## 🚀 How to Implement on Raspberry Pi
+## 🚀 How to Run the System
 
-Follow these exact steps to deploy the AI system onto your Raspberry Pi 4.
-
-### Step 1: Prepare the Environment
-Open a terminal on your Raspberry Pi and clone this repository:
+### Step 1: Start the Local API Hub
+Open a terminal on your Raspberry Pi (or PC) and start the local server:
 ```bash
-git clone https://github.com/Perera1325/Sinhala-Voice-Project.git
-cd Sinhala-Voice-Project
+python src/app.py
 ```
+*(This starts the backend API at `http://127.0.0.1:5000`)*
 
-Install the required Python packages (it is highly recommended to use a virtual environment):
+### Step 2: (Optional) Expose Server for Web Dashboard
+If you are registering a new voice via the public Web Dashboard, you need to link your local `app.py` server to the internet using localtunnel:
 ```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-sudo apt-get install portaudio19-dev  # Required for sounddevice microphone access
+lt --port 5000
 ```
+*(Update your `vite.config.js` or `App.jsx` API base with the generated URL if needed for remote registration)*
 
-### Step 2: Start Your Existing Systems
-Ensure your existing Android-compatible Flask server is running on the Pi (e.g., at `192.168.1.13:5000`) and that your ESP32 hardware is powered on and connected to the same Wi-Fi.
-
-### Step 3: Register Your Voice
-Before the AI will listen to you, you must register your voice profile.
-1. In a new terminal on the Pi, run the biometrics helper server:
-   ```bash
-   python src/app.py
-   ```
-2. Link it to the internet using localtunnel:
-   ```bash
-   lt --port 5000
-   ```
-3. Update the React App (`web_dashboard/src/App.jsx`) with your new tunnel URL, rebuild, and deploy.
-4. Go to the live website, navigate to the **Register** tab, and record your voice to save it to the SQLite database.
-
-### Step 4: Run the AI Pipeline!
-Once your voice is registered, you can start the main listener.
-Open a terminal on the Pi and run:
+### Step 3: Run the Main AI Pipeline
+In a new terminal, start the main listening engine:
 ```bash
 python src/main_production.py
 ```
+
 **The system is now live!** 
 1. Say **"Hey Kasu"** to wake it up.
-2. It will verify your voice biometrics against the database.
-3. If verified, say **"Light eka danna"**.
-4. The TFLite model will classify the command and send the UUID trigger to your existing Flask server to turn on the ESP32!
-
----
-
-## 🛠️ Next Steps for Development
-1. **Train a Real Wake Word Model:** The current wake word system uses an audio volume threshold as a placeholder. You need to record 100 samples of "Hey Kasu" and train a Wake Word CNN.
-2. **Train Fan & Curtain:** Record datasets for the remaining commands to unlock the full 7-class potential of the AI. Update the UUID mapping in `src/main_production.py` once trained!
+2. Speak your command (e.g., *"ලයිට් එක දාන්න"*).
+3. The system verifies your voice, executes the command via `app.py`, and logs the action to your Firebase Realtime Database!

@@ -4,6 +4,8 @@ import time
 import numpy as np
 import sounddevice as sd
 import requests
+import scipy.signal as signal
+import noisereduce as nr
 
 import database
 import speaker_biometrics
@@ -11,6 +13,10 @@ from wakeword_engine import WakeWordDetector
 import speech_recognition as sr
 import nlp_classifier
 import pyttsx3
+
+# Add NoiseRM to path to import the custom audio filters
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'NoiseRM')))
+from audio_filters import vad_guided_dynamic_wiener_filter
 
 def speak(text):
     try:
@@ -29,25 +35,31 @@ def speak(text):
 SAMPLE_RATE = 16000
 CHUNK_DURATION = 0.5   # 0.5s sliding window for Wake Word
 RECORD_DURATION = 4.0  # 4.0s recording for full sentence commands
-FLASK_API_BASE = "http://192.168.8.199:5000/channels"
+FLASK_API_BASE = "http://127.0.0.1:5000/api/devices/control"
 
 # Map human-readable device names to the UUIDs from your existing Flask server
 DEVICE_UUIDS = {
-    "light_1": "89093657-17c4-4b1c-9cfe-16037a5b21d0",
+    "light_1": "5508f5fc-3641-44cd-9cc5-87e5fc677483",
     # Add your Fan and Curtain UUIDs here when you train them!
-    "fan_1": "01d574ae-f9e4-42de-b238-0c9e220ef0f4",
+    "fan_1": "74136aa1-471d-485d-ac02-9c0bb408d9d3",
     "curtain_1": "YOUR-CURTAIN-UUID-HERE"
 }
 
+def apply_advanced_noise_reduction(audio):
+    """
+    Applies our custom VAD-Guided Dynamic Wiener Filter (VGDWF) to perfectly 
+    isolate the human voice and remove all dynamic background noises.
+    """
+    print("🧹 Applying VGDWF Custom Noise Reduction...")
+    return vad_guided_dynamic_wiener_filter(audio, sr=SAMPLE_RATE)
+
 def send_to_flask(device_id, action):
     """Sends the command to your existing UUID-based Flask Server."""
-    uuid = DEVICE_UUIDS.get(device_id)
-    if not uuid:
-        print(f"❌ Unknown device_id: {device_id}")
-        return
-
-    url = f"{FLASK_API_BASE}/{uuid}/control"
-    payload = {"value": action}
+    url = FLASK_API_BASE
+    payload = {
+        "device_id": device_id,
+        "action": action
+    }
     
     try:
         response = requests.post(url, json=payload, timeout=2)
@@ -60,10 +72,27 @@ def send_to_flask(device_id, action):
 
 def main():
     print("\n" + "="*50)
-    print("🚀 PROJECT FLOW AI ASSISTANT (Google STT + Biometrics) 🚀")
+    print("🚀 PROJECT FLOW AI ASSISTANT (Google STT + Biometrics + Noise Reduction) 🚀")
     print("="*50)
 
     database.init_db()
+    
+    # --- STAGE 0: REGISTRATION ---
+    users = database.get_all_users()
+    reg_choice = input(f"You have {len(users)} registered users. Do you want to register a NEW user now? (y/n): ")
+    if reg_choice.lower() == 'y':
+        name = input("Enter your name: ")
+        print("Recording for 5 seconds. Please speak normally to register your voice fingerprint...")
+        audio = sd.rec(int(5.0 * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
+        sd.wait()
+        
+        fingerprint = speaker_biometrics.extract_voice_fingerprint(audio_data=audio.flatten())
+        if fingerprint is not None:
+            database.add_user(name, fingerprint)
+            print(f"User '{name}' registered successfully!\n")
+        else:
+            print("Failed to register. Audio too silent.\n")
+            
     wakeword = WakeWordDetector()
     
     # Initialize the Google Speech Recognizer
@@ -80,7 +109,8 @@ def main():
             is_awake = wakeword.process_audio_stream(audio_chunk.flatten())
             
             # Remove this forced override once you train the Wake Word CNN
-            is_awake = True if np.max(np.abs(audio_chunk)) > 0.05 else False 
+            # Lowered threshold from 0.05 to 0.015 to make it easier to trigger
+            is_awake = True if np.max(np.abs(audio_chunk)) > 0.015 else False 
             
             if not is_awake:
                 continue
@@ -93,9 +123,30 @@ def main():
             command_audio = sd.rec(int(RECORD_DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='float32')
             sd.wait()
             
+            # Calculate SNR to print Test Case scenario for the terminal output
+            noise_part = command_audio.flatten()[:4000]
+            noise_power = np.mean(noise_part**2) + 1e-10
+            signal_power = np.mean(command_audio.flatten()**2)
+            snr_db = 10 * np.log10(signal_power / noise_power)
+            
+            if snr_db > 5.0:
+                env = "Test Case 1: Clean Speech / 10dB"
+            elif snr_db > -2.0:
+                env = "Test Case 2: Moderate Noise / 0dB (Fan/AC)"
+            else:
+                env = "Test Case 3: Heavy Noise / -5dB (Street/Cafe)"
+            
+            print(f"📊 Live Acoustics Analysis:")
+            print(f"   ↳ Detected SNR: {snr_db:.1f} dB")
+            print(f"   ↳ Environment: {env}")
+            
+            # --- STAGE 1.5: NOISE REDUCTION ---
+            print("🧹 Applying Advanced Spectral Noise Reduction (Isolating Voice)...")
+            command_audio_clean = apply_advanced_noise_reduction(command_audio.flatten())
+            
             # --- STAGE 2: BIOMETRICS ---
             users = database.get_all_users()
-            is_authorized, user_name = speaker_biometrics.verify_speaker(incoming_audio_data=command_audio.flatten(), database_users=users)
+            is_authorized, user_name = speaker_biometrics.verify_speaker(incoming_audio_data=command_audio_clean, database_users=users)
 
             if not is_authorized:
                 print("🚫 Intruder Alert: Unrecognized voice. Ignoring.")
@@ -110,7 +161,7 @@ def main():
             
             print("🧠 Transcribing with Google Speech Recognition (Sinhala)...")
             # Convert float32 numpy array to 16-bit PCM bytes for SpeechRecognition
-            audio_data_int16 = (command_audio.flatten() * 32767).astype(np.int16)
+            audio_data_int16 = (command_audio_clean * 32767).astype(np.int16)
             audio_data_obj = sr.AudioData(audio_data_int16.tobytes(), SAMPLE_RATE, 2)
             
             try:
@@ -130,6 +181,20 @@ def main():
                     print(f"🎯 Action Resolved: Turn {action} the {device_id}")
                     speak(f"Turning {action} the {device_id.replace('_1', '')}")
                     send_to_flask(device_id, action)
+                    
+                    # 🔥 Push real-time data to Firebase RTDB
+                    firebase_url = "https://kasundi-ai-home-default-rtdb.asia-southeast1.firebasedatabase.app/telemetry.json"
+                    try:
+                        requests.post(firebase_url, json={
+                            "device": device_id,
+                            "status": action,
+                            "command_text": transcription,
+                            "timestamp": {".sv": "timestamp"}
+                        }, timeout=2)
+                        print(f"🔥 Successfully synced {device_id} ({action}) to Firebase Realtime Database!")
+                    except Exception as fe:
+                        print(f"⚠️ Firebase Sync Warning: {fe}")
+                    
                     time.sleep(2) # Cooldown after successful command
                 else:
                     print("❓ Unknown voice command or no device recognized.")

@@ -12,12 +12,12 @@ INTENT_MAP = {
         r"(turn off|switch off).*?(light|lait)"
     ],
     "FAN_ON": [
-        r"(fan|pan).*?(on|danna|daanna|daapan|daapn)",
-        r"(turn on|switch on).*?(fan|pan)"
+        r"(fan|pan|sam).*?(on|danna|daanna|daapan|daapn)",
+        r"(turn on|switch on).*?(fan|pan|sam)"
     ],
     "FAN_OFF": [
-        r"(fan|pan).*?(off|niwanna|niwapn|niwapan)",
-        r"(turn off|switch off).*?(fan|pan)"
+        r"(fan|pan|sam).*?(off|niwanna|niwapn|niwapan)",
+        r"(turn off|switch off).*?(fan|pan|sam)"
     ],
     "CURTAIN_OPEN": [
         r"(curtain|redee|redi).*?(open|arinna|arapn|arapan)",

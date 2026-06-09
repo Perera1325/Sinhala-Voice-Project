@@ -1,0 +1,561 @@
+Noise_Type,SNR_dB,Filter_Method,Expected_Cmd,Offline_ASR_Text,Offline_Acc,Online_ASR_Text,Online_Acc
+white,-5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,-5,Spectral_Subtraction,light eka danna,light eka,0,නොදන්නා විධානයකි,0
+white,-5,Static_Wiener,light eka danna,light,0,නොදන්නා විධානයකි,0
+white,-5,Wavelet_Denoising,light eka danna,,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,-5,Butterworth_Bandpass,light eka danna,light eka,0,නොදන්නා විධානයකි,0
+white,-5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,0,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,0,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,0,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,0,Wavelet_Denoising,light eka danna,light,0,නොදන්නා විධානයකි,0
+white,0,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,0,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,0,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,5,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,5,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,5,Wavelet_Denoising,light eka danna,light niwanna,0,ලයිට් එක නිවන්න,0
+white,5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,5,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,10,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,15,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,-5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,0,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,10,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+fan,15,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,-5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,0,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,10,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+street,15,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,-5,Unfiltered,light eka danna,light,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Subtraction,light eka danna,light,0,නොදන්නා විධානයකි,0
+cafe,-5,Static_Wiener,light eka danna,light,0,නොදන්නා විධානයකි,0
+cafe,-5,Wavelet_Denoising,light eka danna,light,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Gating,light eka danna,light danna,0,ලයිට් එක දාන්න,1
+cafe,-5,Butterworth_Bandpass,light eka danna,light danna,0,ලයිට් එක දාන්න,1
+cafe,-5,Proposed_VGDWF,light eka danna,light,0,නොදන්නා විධානයකි,0
+cafe,0,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,0,Spectral_Subtraction,light eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,0,Static_Wiener,light eka danna,light danna,0,ලයිට් එක දාන්න,1
+cafe,0,Wavelet_Denoising,light eka danna,,0,නොදන්නා විධානයකි,0
+cafe,0,Spectral_Gating,light eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,0,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,0,Proposed_VGDWF,light eka danna,light,0,නොදන්නා විධානයකි,0
+cafe,5,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,5,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,5,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,5,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,5,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,5,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,5,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,10,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Unfiltered,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Spectral_Subtraction,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Static_Wiener,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Wavelet_Denoising,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Spectral_Gating,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Butterworth_Bandpass,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+cafe,15,Proposed_VGDWF,light eka danna,light eka danna,1,ලයිට් එක දාන්න,1
+white,-5,Unfiltered,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Subtraction,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+white,-5,Static_Wiener,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+white,-5,Wavelet_Denoising,light eka niwanna,,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Gating,light eka niwanna,light eka,0,නොදන්නා විධානයකි,0
+white,-5,Butterworth_Bandpass,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+white,-5,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,0,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,0,Spectral_Subtraction,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+white,0,Static_Wiener,light eka niwanna,light eka,0,නොදන්නා විධානයකි,0
+white,0,Wavelet_Denoising,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+white,0,Spectral_Gating,light eka niwanna,light eka danna,0,ලයිට් එක දාන්න,0
+white,0,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,0,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,5,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,5,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,5,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,5,Wavelet_Denoising,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+white,5,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,5,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,5,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,10,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,15,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,15,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,15,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,15,Wavelet_Denoising,light eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+white,15,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,15,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,15,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,-5,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,0,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,5,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,10,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+fan,15,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,-5,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,0,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,5,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,10,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+street,15,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,-5,Unfiltered,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,-5,Spectral_Subtraction,light eka niwanna,,0,නොදන්නා විධානයකි,0
+cafe,-5,Static_Wiener,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+cafe,-5,Wavelet_Denoising,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Gating,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,-5,Butterworth_Bandpass,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,-5,Proposed_VGDWF,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+cafe,0,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,0,Spectral_Subtraction,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,0,Static_Wiener,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+cafe,0,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,0,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,0,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,0,Proposed_VGDWF,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,5,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,5,Spectral_Subtraction,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,5,Static_Wiener,light eka niwanna,light,0,නොදන්නා විධානයකි,0
+cafe,5,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,5,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,5,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,5,Proposed_VGDWF,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,10,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,10,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,10,Static_Wiener,light eka niwanna,light niwanna,0,ලයිට් එක නිවන්න,1
+cafe,10,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,10,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,10,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,10,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Unfiltered,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Spectral_Subtraction,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Static_Wiener,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Wavelet_Denoising,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Spectral_Gating,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Butterworth_Bandpass,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+cafe,15,Proposed_VGDWF,light eka niwanna,light eka niwanna,1,ලයිට් එක නිවන්න,1
+white,-5,Unfiltered,fan eka danna,fan,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Subtraction,fan eka danna,eka,0,නොදන්නා විධානයකි,0
+white,-5,Static_Wiener,fan eka danna,fan eka,0,නොදන්නා විධානයකි,0
+white,-5,Wavelet_Denoising,fan eka danna,,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Gating,fan eka danna,fan eka,0,නොදන්නා විධානයකි,0
+white,-5,Butterworth_Bandpass,fan eka danna,fan eka,0,නොදන්නා විධානයකි,0
+white,-5,Proposed_VGDWF,fan eka danna,fan,0,නොදන්නා විධානයකි,0
+white,0,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,0,Spectral_Subtraction,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,0,Static_Wiener,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,0,Wavelet_Denoising,fan eka danna,niwanna,0,නොදන්නා විධානයකි,0
+white,0,Spectral_Gating,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,0,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,0,Proposed_VGDWF,fan eka danna,fan eka,0,නොදන්නා විධානයකි,0
+white,5,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,5,Spectral_Subtraction,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,5,Static_Wiener,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,5,Wavelet_Denoising,fan eka danna,fan hay,0,නොදන්නා විධානයකි,0
+white,5,Spectral_Gating,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,5,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,5,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,10,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,10,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,10,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,10,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,10,Spectral_Gating,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+white,10,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,10,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,15,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,-5,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,0,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,5,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,10,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+fan,15,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,-5,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,0,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,5,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,10,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+street,15,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,-5,Unfiltered,fan eka danna,fan,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Subtraction,fan eka danna,,0,නොදන්නා විධානයකි,0
+cafe,-5,Static_Wiener,fan eka danna,,0,නොදන්නා විධානයකි,0
+cafe,-5,Wavelet_Denoising,fan eka danna,fan,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Gating,fan eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,-5,Butterworth_Bandpass,fan eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,-5,Proposed_VGDWF,fan eka danna,fan,0,නොදන්නා විධානයකි,0
+cafe,0,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,0,Spectral_Subtraction,fan eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,0,Static_Wiener,fan eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,0,Wavelet_Denoising,fan eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,0,Spectral_Gating,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+cafe,0,Butterworth_Bandpass,fan eka danna,fan danna,0,ෆෑන් එක දාන්න,1
+cafe,0,Proposed_VGDWF,fan eka danna,danna,0,නොදන්නා විධානයකි,0
+cafe,5,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,5,Spectral_Subtraction,fan eka danna,eka danna,0,නොදන්නා විධානයකි,0
+cafe,5,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,5,Wavelet_Denoising,fan eka danna,fan danna,0,ෆෑන් එක දාන්න,1
+cafe,5,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,5,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,5,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,10,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,10,Spectral_Subtraction,fan eka danna,fan eka danna,1,නොදන්නා විධානයකි,0
+cafe,10,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,10,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,10,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,10,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,10,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Unfiltered,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Spectral_Subtraction,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Static_Wiener,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Wavelet_Denoising,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Spectral_Gating,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Butterworth_Bandpass,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+cafe,15,Proposed_VGDWF,fan eka danna,fan eka danna,1,ෆෑන් එක දාන්න,1
+white,-5,Unfiltered,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Subtraction,fan eka niwanna,,0,නොදන්නා විධානයකි,0
+white,-5,Static_Wiener,fan eka niwanna,fan,0,නොදන්නා විධානයකි,0
+white,-5,Wavelet_Denoising,fan eka niwanna,,0,නොදන්නා විධානයකි,0
+white,-5,Spectral_Gating,fan eka niwanna,eka niwanna,0,නොදන්නා විධානයකි,0
+white,-5,Butterworth_Bandpass,fan eka niwanna,eka,0,නොදන්නා විධානයකි,0
+white,-5,Proposed_VGDWF,fan eka niwanna,fan,0,නොදන්නා විධානයකි,0
+white,0,Unfiltered,fan eka niwanna,fan niwanna,0,ෆෑන් එක නිවන්න,1
+white,0,Spectral_Subtraction,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+white,0,Static_Wiener,fan eka niwanna,eka niwanna,0,නොදන්නා විධානයකි,0
+white,0,Wavelet_Denoising,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+white,0,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,0,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,0,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,5,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,5,Spectral_Subtraction,fan eka niwanna,eka niwanna,0,නොදන්නා විධානයකි,0
+white,5,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,5,Wavelet_Denoising,fan eka niwanna,fan,0,නොදන්නා විධානයකි,0
+white,5,Spectral_Gating,fan eka niwanna,eka niwanna,0,නොදන්නා විධානයකි,0
+white,5,Butterworth_Bandpass,fan eka niwanna,fan niwanna hay,0,ෆෑන් එක නිවන්න,1
+white,5,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,10,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,10,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,10,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,10,Wavelet_Denoising,fan eka niwanna,fan niwanna,0,ෆෑන් එක නිවන්න,1
+white,10,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,10,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,10,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+white,15,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,-5,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,0,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,5,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,10,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+fan,15,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,-5,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,0,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,5,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,10,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+street,15,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,-5,Unfiltered,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Subtraction,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,-5,Static_Wiener,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,-5,Wavelet_Denoising,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,-5,Spectral_Gating,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,-5,Butterworth_Bandpass,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,-5,Proposed_VGDWF,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,0,Unfiltered,fan eka niwanna,fan niwanna,0,ෆෑන් එක නිවන්න,1
+cafe,0,Spectral_Subtraction,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,0,Static_Wiener,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,0,Wavelet_Denoising,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,0,Spectral_Gating,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,0,Butterworth_Bandpass,fan eka niwanna,fan niwanna,0,ෆෑන් එක නිවන්න,1
+cafe,0,Proposed_VGDWF,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,5,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,5,Spectral_Subtraction,fan eka niwanna,eka niwanna,0,නොදන්නා විධානයකි,0
+cafe,5,Static_Wiener,fan eka niwanna,niwanna,0,නොදන්නා විධානයකි,0
+cafe,5,Wavelet_Denoising,fan eka niwanna,fan niwanna,0,ෆෑන් එක නිවන්න,1
+cafe,5,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,5,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,5,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,10,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,10,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,10,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,10,Wavelet_Denoising,fan eka niwanna,fan niwanna,0,ෆෑන් එක නිවන්න,1
+cafe,10,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,10,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,10,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Unfiltered,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Spectral_Subtraction,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Static_Wiener,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Wavelet_Denoising,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Spectral_Gating,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Butterworth_Bandpass,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1
+cafe,15,Proposed_VGDWF,fan eka niwanna,fan eka niwanna,1,ෆෑන් එක නිවන්න,1

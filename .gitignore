@@ -23,3 +23,21 @@ firebase-debug.log
 # Audio
 temp_enroll.wav
 temp_test.wav
+Data_Set/
+Demo_Audio/
+kasundi voices/
+
+# Archives and Docs
+*.zip
+*.docx
+
+# Machine Learning Models & Heavy Files
+NoiseRM/pretrained_models/
+NoiseRM/vosk-model/
+*.ckpt
+*.mdl
+*.npy
+*.fst
+*.dubm
+*.ie
+*.mat

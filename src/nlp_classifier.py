@@ -18,7 +18,7 @@ def classify_command(text):
     # 1. Determine Device (Check Sinhala first, then English)
     if "ලයිට්" in text_sinhala or "light" in text_english or "light" in text_sinhala:
         device_id = "light_1"
-    elif "ෆෑන්" in text_sinhala or "fan" in text_english or "fan" in text_sinhala:
+    elif "ෆෑන්" in text_sinhala or "fan" in text_english or "fan" in text_sinhala or "sam" in text_sinhala or "sam" in text_english:
         device_id = "fan_1"
         
     # 2. Determine Action (Check Sinhala first, then English)
